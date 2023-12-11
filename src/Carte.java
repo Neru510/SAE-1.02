@@ -8,6 +8,11 @@
  */
 public class Carte  {
 
+    private Couleur couleur;
+    private Texture texture;
+    private Figure figure;
+    private int nbFigures;
+
     /**
      * Pre-requis : nbFigures > 0
      * Action : Construit une carte contenant nbFigures "figures" qui possèdent une "texture" et une "couleur"
@@ -15,7 +20,10 @@ public class Carte  {
      */
 
     public Carte(Couleur couleur, int nbFigures, Figure figure, Texture texture) {
-
+        this.couleur = couleur;
+        this.nbFigures = nbFigures;
+        this.figure = figure;
+        this.texture = texture;
     }
 
     /**
@@ -23,7 +31,7 @@ public class Carte  {
      */
 
     public int getNbFigures() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        return this.nbFigures;
     }
 
     /**
@@ -31,7 +39,7 @@ public class Carte  {
      */
 
     public Figure getFigure() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        return this.figure;
     }
 
     /**
@@ -39,7 +47,7 @@ public class Carte  {
      */
 
     public Couleur getCouleur() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        return this.couleur;
     }
 
     /**
@@ -47,7 +55,7 @@ public class Carte  {
      */
 
     public Texture getTexture() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        return this.texture;
     }
 
     /**
