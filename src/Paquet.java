@@ -9,6 +9,8 @@
  * - Le nombre de cartes restantes dans le paquet.
  */
 public class Paquet {
+    public static Carte [] ensTab;
+    public int nbCarteRestantes;
 
     /**
      * Pre-requis : figures.length > 0, couleurs.length > 0, textures.length > 0, nbFiguresMax > 0
@@ -26,7 +28,18 @@ public class Paquet {
      */
 
     public Paquet(Couleur[] couleurs, int nbFiguresMax, Figure[] figures, Texture[] textures) {
-
+        for (int i = 0; i < getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures); i++){
+            for (int n = 0; n < nbFiguresMax; n++){
+                for (int f = 0; f < figures.length; f++){
+                    for (int t = 0; t < textures.length; t++){
+                        for (int c = 0; c < couleurs.length; c++){
+                            this.ensTab[i] = new Carte(couleurs[c], n, figures[f], textures[t]);
+                        }
+                    }
+                }
+            }
+        }
+        //rajouter fonction mélanger ici
     }
 
     /**
@@ -34,7 +47,10 @@ public class Paquet {
      */
 
     public Paquet(Paquet paquet) {
-
+        for (int i = 0; i < paquet.ensTab.length; i++){
+            this.ensTab[i] = paquet.ensTab[i];
+        }
+        this.nbCarteRestantes = paquet.nbCarteRestantes;
     }
 
 
@@ -46,7 +62,14 @@ public class Paquet {
      */
 
     public static int getNombreCartesAGenerer(Couleur[] couleurs, int nbFiguresMax, Figure[] figures, Texture[] textures) {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        int total;
+        int nbCouleur = couleurs.length;
+        int nbFigure = figures.length;
+        int nbTexture = textures.length;
+
+        total = nbCouleur * nbFigure * nbTexture * nbFiguresMax;
+
+        return total;
     }
 
     /**
@@ -55,7 +78,25 @@ public class Paquet {
      */
 
     public void melanger() {
+        int r1, r2;
+        for (int i = 0; i < nbCarteRestantes - 1; i++){
+            r1 = Ut.randomMinMax(0, nbCarteRestantes);
+            r2 = Ut.randomMinMax(0, nbCarteRestantes);
+            swap(r1, r2);
+        }
+    }
 
+    /**
+     * Prérequis : r1 et r2 sont plus petits que nbCarteRestantes - 1
+     * Action : échange deux cartes dont les indices sont donnés en paramètre
+     */
+    public void swap(int r1, int r2){
+        if (r1!=r2) {
+            Carte c1 = new Carte(ensTab[r1].getCouleur(), ensTab[r1].getNbFigures(), ensTab[r1].getFigure(), ensTab[r1].getTexture());
+            Carte c2 = new Carte(ensTab[r2].getCouleur(), ensTab[r2].getNbFigures(), ensTab[r2].getFigure(), ensTab[r2].getTexture());
+            ensTab[r1] = c2;
+            ensTab[r2] = c1;
+        }
     }
 
     /**
@@ -142,7 +183,7 @@ public class Paquet {
      */
 
     public boolean estVide() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        return this.nbCarteRestantes == 0;
     }
 
     /**
@@ -157,6 +198,16 @@ public class Paquet {
 
     @Override
     public String toString() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        String texte ="[ ";
+        for (int c = 0; c < this.nbCarteRestantes; c++){
+            texte = texte + ensTab[c].toString() + " ";
+        }
+        texte = texte + "]\n";
+        if (this.nbCarteRestantes < 2){
+            texte = texte + "Carte restante : " + this.nbCarteRestantes;
+        }else {
+            texte = texte + "Cartes restantes : " + this.nbCarteRestantes;
+        }
+        return texte;
     }
 }

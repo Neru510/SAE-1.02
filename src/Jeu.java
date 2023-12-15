@@ -4,9 +4,11 @@
  * Règles :
  *
  *  - On possède un paquet de cartes qui représentent entre une et trois figures (losange, carre ou ovale), une texture
- *   (vide, hachuré ou plein) et une couleur (rouge, jaune ou bleu). La cardinalité des énumérations est fixée à 3 pour cette partie 2 de la SAE uniquement.
+ *   (vide, hachuré ou plein) et une couleur (rouge, jaune ou bleu). La cardinalité des énumérations est fixée à 3 pour
+ *   cette partie 2 de la SAE uniquement.
  *
- *  - Une table 3x3 permet de stocker 9 cartes. Au début de la partie, on dispose 9 cartes sur la table, piochées sur le dessus du paquet.
+ *  - Une table 3x3 permet de stocker 9 cartes. Au début de la partie, on dispose 9 cartes sur la table, piochées sur le
+ *  dessus du paquet.
  *
  *  - A chaque tour, le joueur doit essayer de trouver un E3C.
  *
@@ -25,6 +27,10 @@
  * - De quoi stocker le score du joueur (humain ou ordinateur).
  */
 public class Jeu {
+
+    private Paquet paquet;
+    private Table table;
+    private int score;
 
     /**
      * Action :

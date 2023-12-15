@@ -6,16 +6,16 @@
  * En mémoire, la Table est représentée par un simple tableau (à une dimension)
  * Quand elle est initialisée, la table est vide.
  *
- * Pour désigner une carte sur la table, on utilise des coordonées (i,j) ou i représenta la ligne et j la colonne.
+ * Pour désigner une carte sur la table, on utilise des coordonnées (i,j) ou i représenta la ligne et j la colonne.
  * Les lignes et colonnes sont numérotés à partir de 1.
  * Les cartes sont numérotées à partir de 1.
  *
  * Par exemple, sur une table 3x3, la carte en position (1,1) est la premiere carte du tableau, soit celle à l'indice 0.
- * La carte (2,1) => carte numéro 4 stockée à l'indice 3  dans le tableau représenatnt la table
- * La carte (3,3) => carte numéro 9 stockée à l'indice 8  dans le tableau représenatnt la table
+ * La carte (2,1) => carte numéro 4 stockée à l'indice 3 dans le tableau représentant la table
+ * La carte (3,3) => carte numéro 9 stockée à l'indice 8 dans le tableau représentant la table
  */
 public class Table {
-
+    private int [] tableau;
     /**
      * Pre-requis : hauteur >=3, largeur >=3
      *
@@ -25,11 +25,11 @@ public class Table {
      */
 
     public Table(int hauteur, int largeur){
-
+        this.tableau = new int [hauteur * largeur];
     }
 
     /**
-     * Résullat : Le nombre de cartes que la table peut stocker.
+     * Résultat : Le nombre de cartes que la table peut stocker.
      */
 
     public int getTaille() {
