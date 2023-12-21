@@ -45,7 +45,6 @@ public class Carte  {
     /**
      * Résultat : La couleur représentée sur les figures de la carte.
      */
-
     public Couleur getCouleur() {
         return this.couleur;
     }
@@ -53,7 +52,6 @@ public class Carte  {
     /**
      * Résultat : La texture représentée sur les figures de la carte.
      */
-
     public Texture getTexture() {
         return this.texture;
     }
@@ -78,7 +76,58 @@ public class Carte  {
      */
 
     public int compareTo(Carte carte) {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        int value;
+        if (this.couleur.compareTo(carte.couleur)==0){ // compare les couleurs
+            if (this.nbFigures == carte.nbFigures){ // compare le nombre de figures
+                if (this.figure.compareTo(carte.figure)==0){
+                    value = this.texture.compareTo(carte.texture);
+                }else {
+                    value = this.figure.compareTo(carte.figure);
+                }
+            } else {
+                value = this.nbFigures - carte.nbFigures;
+            }
+        }else {
+            value = this.couleur.compareTo(carte.couleur);
+        }
+        return value;
+    }
+
+    private String ligne(int position, int value){
+        String ligne = "";
+        int max = 9;
+        if (value > max){
+            max = 8;
+            if (position == 7){
+                position = 6;
+            }
+        }
+        for (int c = 0; c < max; c++){
+            if (c == position){
+                ligne = ligne + value;
+            }else {
+                ligne = ligne + texture.getForme();
+            }
+        }
+        return ligne +'\n';
+    }
+    private String ligne(int position, String value) {
+        String ligne = "";
+        for (int c = 0; c < 9; c++) {
+            if (c == position) {
+                ligne = ligne + value;
+            } else {
+                ligne = ligne + texture.getForme();
+            }
+        }
+        return ligne + '\n';
+    }
+    private String ligne() {
+        String ligne = "";
+        for (int c = 0; c < 9; c++) {
+            ligne = ligne + texture.getForme();
+        }
+        return ligne + '\n';
     }
 
     /**
@@ -89,9 +138,14 @@ public class Carte  {
      *  (Vous devez choisir une représentation agréable pour l'utilisateur)
      */
 
+
     @Override
     public String toString() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        String carte = ligne(1, nbFigures);
+        carte = carte+ligne();
+        carte = carte+ligne(4, figure.getFigure());
+        carte = carte+ligne();
+        carte = carte+ligne(7, nbFigures);
+        return couleur.ColorString(carte);
     }
-
 }
