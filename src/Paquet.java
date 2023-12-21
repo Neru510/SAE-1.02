@@ -27,9 +27,10 @@ public class Paquet {
      *  Génère un paquet (mélangé) avec toutes les combinaisons de cartes possibles pour ces caractéristiques : 1-A-S (rouge), 1-A-T (rouge), etc...
      */
 
-    public Paquet(Couleur[] couleurs, int nbFiguresMax, Figure[] figures, Texture[] textures) {
+    /**public Paquet(Couleur[] couleurs, int nbFiguresMax, Figure[] figures, Texture[] textures) {
+        ensTab = new Carte[ getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures)];
         for (int i = 0; i < getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures); i++){
-            for (int n = 0; n < nbFiguresMax; n++){
+            for (int n = 1; n < nbFiguresMax+1; n++){
                 for (int f = 0; f < figures.length; f++){
                     for (int t = 0; t < textures.length; t++){
                         for (int c = 0; c < couleurs.length; c++){
@@ -39,6 +40,23 @@ public class Paquet {
                 }
             }
         }
+        nbCarteRestantes = ensTab.length;
+        //rajouter fonction mélanger ici
+    }*/
+    public Paquet(Couleur[] couleurs, int nbFiguresMax, Figure[] figures, Texture[] textures) {
+        ensTab = new Carte[ getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures)];
+        int i = 0;
+        for (int c = 0; c < couleurs.length; c++){
+            for (int n = 1; n < nbFiguresMax+1; n++){
+                for (int f = 0; f < figures.length; f++){
+                    for (int t = 0; t < textures.length; t++){
+                        this.ensTab[i] = new Carte(couleurs[c], n, figures[f], textures[t]);
+                        i = i+1;
+                    }
+                }
+            }
+        }
+        nbCarteRestantes = ensTab.length;
         //rajouter fonction mélanger ici
     }
 
@@ -198,16 +216,36 @@ public class Paquet {
 
     @Override
     public String toString() {
-        String texte ="[ ";
-        for (int c = 0; c < this.nbCarteRestantes; c++){
-            texte = texte + ensTab[c].toString() + " ";
+        String texte = "";
+        int min = 0;
+        int y = min;
+        char value ;
+        for (int x = 0; x <5; x++){
+            for (int c = 0; c < nbCarteRestantes; c++){
+                value = ensTab[c].toString().charAt(y);
+                y = min;
+                while (value != '\n'){
+                    value = ensTab[c].toString().charAt(y);
+                    if (ensTab[c].toString().charAt(y) != '\n'){
+                        texte = texte + ensTab[c].toString().charAt(y);
+                    }
+                    y= y+1;
+                }
+                texte = texte+Couleur.getAnnuler() + " ";
+            }
+            min = min+25;
+            texte = texte + '\n';
         }
-        texte = texte + "]\n";
         if (this.nbCarteRestantes < 2){
             texte = texte + "Carte restante : " + this.nbCarteRestantes;
         }else {
             texte = texte + "Cartes restantes : " + this.nbCarteRestantes;
         }
         return texte;
+    }
+
+    // temp ============================================================================================================
+    public Carte getCarteX(int x){
+        return ensTab[x];
     }
 }
