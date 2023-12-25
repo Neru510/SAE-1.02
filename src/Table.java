@@ -1,3 +1,5 @@
+import static java.lang.Math.sqrt;
+
 /**
  * La classe Table représente une table de jeu contenant des cartes.
  *
@@ -31,9 +33,35 @@ public class Table {
     /**
      * Résultat : Le nombre de cartes que la table peut stocker.
      */
-
     public int getTaille() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        return tableau.length;
+    }
+
+    /**
+     * Action : Affichage des cartes de la table mise en parametre sous forme de ligne
+     */
+    private static String ligneDeXCarte(Carte [] paquet){
+        String texte = "";
+        int min = 0;
+        int y = min;
+        char value ;
+        for (int x = 0; x <5; x++){
+            for (int c = 0; c < paquet.length; c++){
+                value = paquet[c].toString().charAt(y);
+                y = min;
+                while (value != '\n'){
+                    value = paquet[c].toString().charAt(y);
+                    if (paquet[c].toString().charAt(y) != '\n'){
+                        texte = texte + paquet[c].toString().charAt(y);
+                    }
+                    y= y+1;
+                }
+                texte = texte+Couleur.getAnnuler() + " ";
+            }
+            min = min+25;
+            texte = texte + '\n';
+        }
+        return texte;
     }
 
     /**
@@ -42,16 +70,52 @@ public class Table {
      * L'affichage des cartes doit respecter le format défini dans la classe Carte (chaque carte doit donc être colorée).
      * On ne donne volontairement pas d'exemple puisque celà depend du choix fait pour votre représentation de Carte
      */
+    private int[] getDimension(){
+        int taille = this.tableau.length;
+        float valueR = (float) sqrt(taille);
+        int value1;
+        int value2;
+        if (valueR%1==0 ){
+            value1 = (int) valueR;
+            value2 = (int) valueR;
+        }else {
+            if (taille%10 == 0){
+                value1 = 10;
+            }else if (taille%5 == 0){
+                value1 = 5;
+            }else if (taille%3 == 0){
+                value1 = 3;
+            }else{
+                value1 = 2;
+            }
+            value2 = taille/value1;
+        }
+        return new int[]{value1, value2};
+    }
 
-    public String toString() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+    public String toString() { // PAS FONCTIONNEL MAIS MAINTENANT SAIT RETROUVER UNE TAILLE D'ORIGINE
+        int xMax = getDimension()[0];
+        int yMax = getDimension()[1];
+        String texte = "";
+        for (int x = 0; x < xMax; x ++){
+            for (int y = 0; y < yMax; y++){
+                texte = texte + (y+1)+" ";
+            }
+            texte = texte + '\n';
+        }
+        return texte;
     }
 
     /**
      * Résullat : Vrai la carte située aux coordonnées précisées en paramètre est une carte possible pour la table.
      */
     public boolean carteExiste(Coordonnees coordonnees) {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        boolean value = false;
+        int[] xy = getDimension();
+        if (0 < coordonnees.getLigne() && coordonnees.getLigne() <= xy[0] && 0 < coordonnees.getColonne() && coordonnees.getColonne() <= xy[1]){
+            value = true;
+        }
+        return value;
     }
 
     /**
