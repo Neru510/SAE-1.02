@@ -60,6 +60,10 @@ public class Paquet {
         //rajouter fonction mélanger ici
     }
 
+    public Paquet(){
+        this(Couleur.values(), 3, Figure.values(), Texture.values());
+    }
+
     /**
      * Action : Construit un paquet par recopie en copiant les données du paquet passé en paramètre.
      */
@@ -97,9 +101,9 @@ public class Paquet {
 
     public void melanger() {
         int r1, r2;
-        for (int i = 0; i < nbCarteRestantes - 1; i++){
-            r1 = Ut.randomMinMax(0, nbCarteRestantes);
-            r2 = Ut.randomMinMax(0, nbCarteRestantes);
+        for (int i = 0; i < nbCarteRestantes; i++){
+            r1 = Ut.randomMinMax(0, nbCarteRestantes-1);
+            r2 = Ut.randomMinMax(0, nbCarteRestantes-1);
             swap(r1, r2);
         }
     }
@@ -121,13 +125,26 @@ public class Paquet {
      * Action : Calcule et renvoie un paquet trié à partir du paquet courant (this) selon la méthode du tri selection.
      * Le tri est effectué à partir des données du paquet courant (this) mais celui-ci ne doit pas être modifié !
      * Une nouvelle instance du paquet est traitée et renvoyée.
-     * On rappelle que le paquet peut aussi contenir des cartes déjà piochées  qu'il faut ignorer (voir partie 2 de la SAE).
+     * On rappelle que le paquet peut aussi contenir des cartes déjà piochées qu'il faut ignorer (voir partie 2 de la SAE).
      * Le tri doit fonctionner que le Paquet soit plein ou non.
      * https://www.youtube.com/watch?v=Ns4TPTC8whw&t=2s vidéo explicative
      */
 
     public Paquet trierSelection() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        Paquet paquetTrier = new Paquet(this);
+        int min;
+        int temp;
+        for (int i = 0; i < paquetTrier.nbCarteRestantes; i++){
+            min = i;
+            for (int j = i+1; j < paquetTrier.nbCarteRestantes; j++){
+                 if (paquetTrier.getCarteX(min).compareTo(paquetTrier.getCarteX(j)) < 0){
+                     min = j;
+                }
+            }
+            paquetTrier.swap(i, min);
+        }
+        //copie paquet
+        return paquetTrier;
     }
 
     /**
@@ -141,7 +158,15 @@ public class Paquet {
      */
 
     public Paquet trierBulles() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        Paquet paquetTrier = new Paquet(this);
+        for (int i = paquetTrier.nbCarteRestantes-1; 0 < i; i--) {
+            for (int j = 0; j < i - 1; j++) {
+                if (paquetTrier.getCarteX(j).compareTo(paquetTrier.getCarteX(j+1)) < 0) {
+                    swap(j, j+1);
+                }
+            }
+        }
+        return paquetTrier;
     }
 
     /**
@@ -154,7 +179,18 @@ public class Paquet {
      */
 
     public Paquet trierInsertion() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        Paquet paquetTrier = new Paquet(this);
+        int k;
+        Carte temp;
+        for (int i = 1; i < paquetTrier.nbCarteRestantes; i++){
+            temp = paquetTrier.getCarteX(i);
+            k = i;
+            while (k > 0 && temp.compareTo(paquetTrier.getCarteX(k-1)) > 0){
+                swap(k, k-1);
+                k = k-1;
+            }
+        }
+        return paquetTrier;
     }
 
     /**
@@ -164,7 +200,11 @@ public class Paquet {
      * La méthode est "static" et ne s'effectue donc pas sur la paquet courant "this".
      */
     public static void testTris() {
-
+        Paquet paquet = new Paquet();
+        System.out.println("Test des tries :");
+        System.out.print(" selection :");
+        System.out.print(" bulle :");
+        System.out.print(" insertion :");
     }
 
     /**
@@ -185,15 +225,25 @@ public class Paquet {
      */
 
     public Carte[] piocher(int nbCartes) {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        Carte [] cartesPiocher = null;
+        if (peutPiocher(nbCartes)){
+            cartesPiocher = new Carte[nbCartes];
+            int x = 0;
+            for (int pioche = this.nbCarteRestantes; (this.nbCarteRestantes-nbCartes) < pioche; pioche--){
+                cartesPiocher[x] = getCarteX(pioche-1);
+                x = x +1;
+            }
+            this.nbCarteRestantes = this.nbCarteRestantes - nbCartes;
+        }
+        return cartesPiocher;
     }
 
     /**
      * Résultat : Vrai s'il reste assez de cartes dans le paquet pour piocher nbCartes.
      */
 
-    public boolean peutPicoher(int nbCartes) {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+    public boolean peutPiocher(int nbCartes) {
+        return this.nbCarteRestantes >= nbCartes;
     }
 
     /**
