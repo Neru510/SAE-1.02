@@ -160,7 +160,7 @@ public class Paquet {
 
     public Paquet trierBulles() {
         Paquet paquetTrier = new Paquet(this);
-        for (int i = paquetTrier.nbCarteRestantes-1; 0 < i; i--) {
+        for (int i = paquetTrier.nbCarteRestantes; 0 < i; i--) {
             for (int j = 0; j < i - 1; j++) {
                 if (paquetTrier.getCarteX(j).compareTo(paquetTrier.getCarteX(j+1)) < 0) {
                     swap(j, j+1);
@@ -202,11 +202,33 @@ public class Paquet {
      */
 
     public static void testTris() {
-        Paquet paquet = new Paquet();
-        System.out.println("Test des tries :");
-        System.out.println(" selection : " +Ut.getTempsExecution((Runnable) paquet.trierSelection()));
-        System.out.println(" bulle :" +Ut.getTempsExecution((Runnable) paquet.trierBulles()));
-        System.out.println(" insertion :" + Ut.getTempsExecution((Runnable) paquet.trierInsertion()));
+        System.out.println("|________________________________________________________________________[ Test Tries ]________________________________________________________________________|");
+        Couleur [] listeDeCouleur = new Couleur[]{Couleur.ROUGE, Couleur.BLEU};
+        Figure [] listeDeFigure = new  Figure[]{Figure.LOSANGE, Figure.CARRE};
+        Texture [] listeDeTexture= new Texture[]{Texture.HACHURE, Texture.VIDE};
+        Paquet paquetS = new Paquet(listeDeCouleur, 2, listeDeFigure, listeDeTexture);
+        paquetS.melanger();
+        System.out.println("\n\n-[ Trie par Selection ] ");
+        System.out.println("Paquet mélangé");
+        System.out.println(paquetS.toString());
+        System.out.println("Paquet trié avec la méthode de trie par selection");
+        System.out.println(paquetS.trierSelection().toString());
+
+        Paquet paquetB = new Paquet(listeDeCouleur, 2, listeDeFigure, listeDeTexture);
+        paquetB.melanger();
+        System.out.println("\n\n-[ Trie Bulle ] ");
+        System.out.println("Paquet mélangé");
+        System.out.println(paquetB.toString());
+        System.out.println("Paquet trié avec la méthode de trie bulle");
+        System.out.println(paquetB.trierBulles().toString());
+
+        Paquet paquetI = new Paquet(listeDeCouleur, 2, listeDeFigure, listeDeTexture);
+        paquetI.melanger();
+        System.out.println("\n\n-[ Trie Insertion ] ");
+        System.out.println("Paquet mélangé");
+        System.out.println(paquetI.toString());
+        System.out.println("Paquet trié avec la méthode de trie par insertion");
+        System.out.println(paquetI.trierInsertion().toString());
     }
 
     /**
