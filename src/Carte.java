@@ -75,20 +75,20 @@ public class Carte  {
      *  Un nombre strictement positif si "this "est supérieur à "carte"
      */
 
-    public int compareTo(Carte carte) {
+   public int compareTo(Carte carte) {
         int value;
         if (this.couleur.compareTo(carte.couleur)==0){ // compare les couleurs
             if (this.nbFigures == carte.nbFigures){ // compare le nombre de figures
                 if (this.figure.compareTo(carte.figure)==0){
-                    value = this.texture.compareTo(carte.texture);
+                    value = -this.texture.compareTo(carte.texture);
                 }else {
                     value = this.figure.compareTo(carte.figure);
                 }
             } else {
-                value = this.nbFigures - carte.nbFigures;
+                value = carte.nbFigures - this.nbFigures ;
             }
         }else {
-            value = this.couleur.compareTo(carte.couleur);
+            value = -this.couleur.compareTo(carte.couleur);
         }
         return value;
     }
