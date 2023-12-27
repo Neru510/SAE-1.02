@@ -147,6 +147,7 @@ public class Paquet {
         return paquetTrier;
     }
 
+
     /**
      * Action : Calcule et renvoie un paquet trié à partir du paquet courant (this) selon la méthode du tri bulles.
      * Le tri est effectué à partir des données du paquet courant (this) mais celui-ci ne doit pas être modifié !
@@ -199,12 +200,13 @@ public class Paquet {
      * Des messages d'informations devront être affichés.
      * La méthode est "static" et ne s'effectue donc pas sur la paquet courant "this".
      */
+
     public static void testTris() {
         Paquet paquet = new Paquet();
         System.out.println("Test des tries :");
-        System.out.print(" selection :");
-        System.out.print(" bulle :");
-        System.out.print(" insertion :");
+        System.out.println(" selection : " +Ut.getTempsExecution((Runnable) paquet.trierSelection()));
+        System.out.println(" bulle :" +Ut.getTempsExecution((Runnable) paquet.trierBulles()));
+        System.out.println(" insertion :" + Ut.getTempsExecution((Runnable) paquet.trierInsertion()));
     }
 
     /**
