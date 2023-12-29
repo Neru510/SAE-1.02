@@ -201,34 +201,61 @@ public class Paquet {
      * La méthode est "static" et ne s'effectue donc pas sur la paquet courant "this".
      */
 
-    public static void testTris() {
-        System.out.println("|________________________________________________________________________[ Test Tries ]________________________________________________________________________|");
-        Couleur [] listeDeCouleur = new Couleur[]{Couleur.ROUGE, Couleur.BLEU};
-        Figure [] listeDeFigure = new  Figure[]{Figure.LOSANGE, Figure.CARRE};
-        Texture [] listeDeTexture= new Texture[]{Texture.HACHURE, Texture.VIDE};
-        Paquet paquetS = new Paquet(listeDeCouleur, 2, listeDeFigure, listeDeTexture);
-        paquetS.melanger();
-        System.out.println("\n\n-[ Trie par Selection ] ");
-        System.out.println("Paquet mélangé");
-        System.out.println(paquetS.toString());
-        System.out.println("Paquet trié avec la méthode de trie par selection");
-        System.out.println(paquetS.trierSelection().toString());
+    public long testTriSelec(){
+        Runnable runnable = () -> {
+            this.trierSelection();
+        };
+        return Ut.getTempsExecution(runnable);
+    }
 
-        Paquet paquetB = new Paquet(listeDeCouleur, 2, listeDeFigure, listeDeTexture);
-        paquetB.melanger();
-        System.out.println("\n\n-[ Trie Bulle ] ");
-        System.out.println("Paquet mélangé");
-        System.out.println(paquetB.toString());
-        System.out.println("Paquet trié avec la méthode de trie bulle");
-        System.out.println(paquetB.trierBulles().toString());
+    public long testTriBulle(){
+        Runnable runnable = () -> {
+            this.trierBulles();
+        };
+        return Ut.getTempsExecution(runnable);
+    }
 
-        Paquet paquetI = new Paquet(listeDeCouleur, 2, listeDeFigure, listeDeTexture);
-        paquetI.melanger();
-        System.out.println("\n\n-[ Trie Insertion ] ");
-        System.out.println("Paquet mélangé");
-        System.out.println(paquetI.toString());
-        System.out.println("Paquet trié avec la méthode de trie par insertion");
-        System.out.println(paquetI.trierInsertion().toString());
+    public long testTriInser(){
+        Runnable runnable = () -> {
+            this.trierInsertion();
+        };
+        return Ut.getTempsExecution(runnable);
+    }
+
+    public Runnable testTris() {
+        Runnable runnable = () -> {
+            System.out.println("|________________________________________________________________________[ Test Tris ]________________________________________________________________________|");
+            /**Couleur [] listeDeCouleur = new Couleur[]{Couleur.ROUGE, Couleur.JAUNE};
+            Figure [] listeDeFigure = new  Figure[]{Figure.LOSANGE, Figure.CARRE};
+            Texture [] listeDeTexture= new Texture[]{Texture.HACHURE, Texture.POIS};
+            Paquet paquetS = new Paquet(listeDeCouleur, 2, listeDeFigure, listeDeTexture);
+
+            this.melanger();
+            System.out.println("\n\n-[ Tri par Selection ] ");
+            System.out.println("Paquet mélangé");
+            System.out.println(this.toString());
+            System.out.println("Paquet trié avec la méthode de tri par selection");
+            System.out.println(this.trierSelection().toString());
+
+            Paquet paquetB = new Paquet(listeDeCouleur, 2, listeDeFigure, listeDeTexture);*/
+            this.melanger();
+            System.out.println("\n\n-[ Tri Bulle ] ");
+            System.out.println("Paquet mélangé");
+            System.out.println(this.toString());
+            System.out.println("Paquet trié avec la méthode de tri bulle");
+            System.out.println(this.trierBulles().toString());/**
+
+
+            Paquet paquetI = new Paquet(listeDeCouleur, 2, listeDeFigure, listeDeTexture);
+            this.melanger();
+            System.out.println("\n\n-[ Tri Insertion ] ");
+            System.out.println("Paquet mélangé");
+            System.out.println(this.toString());
+            System.out.println("Paquet trié avec la méthode de tri par insertion");
+            System.out.println(this.trierInsertion().toString());
+            */
+        };
+        return runnable;
     }
 
     /**

@@ -9,7 +9,13 @@ public class Main {
         Texture [] listeDeTexture= Texture.values();
 
         Paquet jeu1 = new Paquet(listeDeCouleur, 4, listeDeFigure, listeDeTexture);
-        System.out.println(jeu1.toString());
+        /*System.out.println(jeu1.toString());*/
+
+        System.out.println("Tri Selection = " + jeu1.testTriSelec() + "ns");
+
+        System.out.println("Tri Bulle = " + jeu1.testTriBulle() + "ns");
+
+        System.out.println("Tri Insertion = " + jeu1.testTriInser() + "ns");
 
     }
 
