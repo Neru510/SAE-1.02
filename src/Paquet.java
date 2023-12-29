@@ -133,7 +133,6 @@ public class Paquet {
     public Paquet trierSelection() {
         Paquet paquetTrier = new Paquet(this);
         int min;
-        int temp;
         for (int i = 0; i < paquetTrier.nbCarteRestantes; i++){
             min = i;
             for (int j = i+1; j < paquetTrier.nbCarteRestantes; j++){
@@ -221,6 +220,13 @@ public class Paquet {
         };
         return Ut.getTempsExecution(runnable);
     }
+
+    /*public long testTrit(){
+        Runnable runnable = () -> {
+            this.melanger();
+        };
+        return Ut.getTempsExecution(runnable);
+    }*/
 
     public Runnable testTris() {
         Runnable runnable = () -> {

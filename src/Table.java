@@ -19,7 +19,7 @@ import static java.lang.Math.sqrt;
 public class Table {
     private int [] tableau;
     /**
-     * Pre-requis : hauteur >=3, largeur >=3
+     * Pre-requis : hautenur >=3, largeur >=3
      *
      * Action : Construit une table "vide" avec les dimensions précisées en paramètre.
      *
@@ -40,12 +40,12 @@ public class Table {
     /**
      * Action : Affichage des cartes de la table mise en parametre sous forme de ligne
      */
-    private static String ligneDeXCarte(Carte [] paquet){
+    public static String ligneDeXCarte(Carte [] paquet){
         String texte = "";
         int min = 0;
         int y = min;
         char value ;
-        for (int x = 0; x <5; x++){
+        for (int x = 0; x < 5; x++){
             for (int c = 0; c < paquet.length; c++){
                 value = paquet[c].toString().charAt(y);
                 y = min;
