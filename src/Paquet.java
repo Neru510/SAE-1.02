@@ -28,21 +28,21 @@ public class Paquet {
      */
 
     /**public Paquet(Couleur[] couleurs, int nbFiguresMax, Figure[] figures, Texture[] textures) {
-        ensTab = new Carte[ getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures)];
-        for (int i = 0; i < getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures); i++){
-            for (int n = 1; n < nbFiguresMax+1; n++){
-                for (int f = 0; f < figures.length; f++){
-                    for (int t = 0; t < textures.length; t++){
-                        for (int c = 0; c < couleurs.length; c++){
-                            this.ensTab[i] = new Carte(couleurs[c], n, figures[f], textures[t]);
-                        }
-                    }
-                }
-            }
-        }
-        nbCarteRestantes = ensTab.length;
-        //rajouter fonction mélanger ici
-    }*/
+     ensTab = new Carte[ getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures)];
+     for (int i = 0; i < getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures); i++){
+     for (int n = 1; n < nbFiguresMax+1; n++){
+     for (int f = 0; f < figures.length; f++){
+     for (int t = 0; t < textures.length; t++){
+     for (int c = 0; c < couleurs.length; c++){
+     this.ensTab[i] = new Carte(couleurs[c], n, figures[f], textures[t]);
+     }
+     }
+     }
+     }
+     }
+     nbCarteRestantes = ensTab.length;
+     //rajouter fonction mélanger ici
+     }*/
     public Paquet(Couleur[] couleurs, int nbFiguresMax, Figure[] figures, Texture[] textures) {
         ensTab = new Carte[ getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures)];
         int i = 0;
@@ -136,8 +136,8 @@ public class Paquet {
         for (int i = 0; i < paquetTrier.nbCarteRestantes; i++){
             min = i;
             for (int j = i+1; j < paquetTrier.nbCarteRestantes; j++){
-                 if (paquetTrier.getCarteX(min).compareTo(paquetTrier.getCarteX(j)) < 0){
-                     min = j;
+                if (paquetTrier.getCarteX(min).compareTo(paquetTrier.getCarteX(j)) < 0){
+                    min = j;
                 }
             }
             paquetTrier.swap(i, min);
@@ -221,47 +221,17 @@ public class Paquet {
         return Ut.getTempsExecution(runnable);
     }
 
-    /*public long testTrit(){
-        Runnable runnable = () -> {
-            this.melanger();
-        };
-        return Ut.getTempsExecution(runnable);
-    }*/
+    public static void testTrit(){
+        Couleur [] listeDeCouleur = Couleur.values();
+        Figure [] listeDeFigure = Figure.values();
+        Texture [] listeDeTexture= Texture.values();
 
-    public Runnable testTris() {
-        Runnable runnable = () -> {
-            System.out.println("|________________________________________________________________________[ Test Tris ]________________________________________________________________________|");
-            /**Couleur [] listeDeCouleur = new Couleur[]{Couleur.ROUGE, Couleur.JAUNE};
-            Figure [] listeDeFigure = new  Figure[]{Figure.LOSANGE, Figure.CARRE};
-            Texture [] listeDeTexture= new Texture[]{Texture.HACHURE, Texture.POIS};
-            Paquet paquetS = new Paquet(listeDeCouleur, 2, listeDeFigure, listeDeTexture);
-
-            this.melanger();
-            System.out.println("\n\n-[ Tri par Selection ] ");
-            System.out.println("Paquet mélangé");
-            System.out.println(this.toString());
-            System.out.println("Paquet trié avec la méthode de tri par selection");
-            System.out.println(this.trierSelection().toString());
-
-            Paquet paquetB = new Paquet(listeDeCouleur, 2, listeDeFigure, listeDeTexture);*/
-            this.melanger();
-            System.out.println("\n\n-[ Tri Bulle ] ");
-            System.out.println("Paquet mélangé");
-            System.out.println(this.toString());
-            System.out.println("Paquet trié avec la méthode de tri bulle");
-            System.out.println(this.trierBulles().toString());/**
-
-
-            Paquet paquetI = new Paquet(listeDeCouleur, 2, listeDeFigure, listeDeTexture);
-            this.melanger();
-            System.out.println("\n\n-[ Tri Insertion ] ");
-            System.out.println("Paquet mélangé");
-            System.out.println(this.toString());
-            System.out.println("Paquet trié avec la méthode de tri par insertion");
-            System.out.println(this.trierInsertion().toString());
-            */
-        };
-        return runnable;
+        Paquet jeu1 = new Paquet(listeDeCouleur, 1000, listeDeFigure, listeDeTexture);
+        System.out.println("Nous allons tester différent trie sur un paquet de " + jeu1.nbCarteRestantes + " cartes");
+        jeu1.melanger();
+        System.out.println("Tri Selection = " + jeu1.testTriSelec() + "ms");
+        System.out.println("Tri Bulle = " + jeu1.testTriBulle() + "ms");
+        System.out.println("Tri Insertion = " + jeu1.testTriInser() + "ms");
     }
 
     /**
