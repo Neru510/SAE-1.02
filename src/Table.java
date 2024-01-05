@@ -18,6 +18,7 @@ import static java.lang.Math.sqrt;
  */
 public class Table {
     private int [] tableau;
+    private Carte [] cartes;
     /**
      * Pre-requis : hautenur >=3, largeur >=3
      *
@@ -93,15 +94,19 @@ public class Table {
         return new int[]{value1, value2};
     }
 
-    public String toString() { // PAS FONCTIONNEL MAIS MAINTENANT SAIT RETROUVER UNE TAILLE D'ORIGINE
-        int xMax = getDimension()[0];
-        int yMax = getDimension()[1];
+    public String toString() {
         String texte = "";
-        for (int x = 0; x < xMax; x ++){
-            for (int y = 0; y < yMax; y++){
-                texte = texte + (y+1)+" ";
+        Carte [] ligne;
+        ligne = new Carte[getDimension()[0]];
+        int i = 0;
+        for (int x = 0; x < tableau.length; x ++){
+            ligne[i] = cartes[x];
+            if ((x+1)%getDimension()[0] == 0){
+                texte = texte + ligneDeXCarte(ligne) + "\n";
+                ligne = new Carte[getDimension()[0]];
+                i = -1;
             }
-            texte = texte + '\n';
+            i = i + 1;
         }
         return texte;
     }
@@ -128,20 +133,59 @@ public class Table {
      * Résullat : Le numéro de carte sélectionné.
      *
      */
+    private int getPositionByCoordonnes(Coordonnees co){
+        int value = 0;
+        for (int x = 0; x<co.getLigne()-1; x++){
+            value = value + getDimension()[1];
+        }
+        value = value + co.getColonne();
+        return value;
+    }
 
     public int faireSelectionneUneCarte() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        int [] dimension = this.getDimension();
+        System.out.println("Saisissez les coordonné de la carte souhaitée au format ''x,y'' : ");
+        String texte = Ut.saisirChaine();
+        if (Coordonnees.formatEstValide(texte)){
+            Coordonnees coordonne = new Coordonnees(texte);
+            if (carteExiste(coordonne)){
+                return getPositionByCoordonnes(coordonne);
+            }
+        }
+        return faireSelectionneUneCarte();
     }
 
     /**
      * Pre-requis : 1<=nbCartes <= nombre de Cartes de this
-     * Action : Fait sélectionner nbCartes Cartes au joueur  sur la table en le faisant recommencer jusqu'à avoir une sélection valide.
+     * Action : Fait sélectionner nbCartes Cartes au joueur sur la table en le faisant recommencer jusqu'à avoir une sélection valide.
      * Il ne doit pas y avoir de doublons dans les numéros de cartes sélectionnées.
      * Résullat : Un tableau contenant les numéros de cartes sélectionnées.
      */
+    private boolean intInTab(int v, int[] tableau){
+        boolean value = false;
+        int fini = 0;
+        while (fini < tableau.length && !value){
+            if (tableau[fini] == v){
+                value = true;
+            }
+            fini = fini +1;
+        }
+        return value;
+    }
 
     public int[] selectionnerCartesJoueur(int nbCartes) {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        int [] carteSelect = new int[nbCartes];
+        int ajout = 0;
+        int carte;
+
+        while (ajout < nbCartes){
+            carte = faireSelectionneUneCarte();
+            if (!intInTab(carte, carteSelect)){
+                carteSelect[ajout] = carte;
+                ajout = ajout+1;
+            }
+        }
+        return carteSelect;
     }
 
     /**
@@ -151,7 +195,15 @@ public class Table {
      */
 
     public void afficherSelection(int[] selection) {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        Carte [] cartesAffiche = new Carte[selection.length];
+        for (int x =0; x < selection.length; x++){
+            cartesAffiche[x] = this.cartes[selection[x]];
+        }
+        System.out.println(ligneDeXCarte(cartesAffiche));
+    }
+
+    public void setCartes(Carte [] cartes){
+        this.cartes = cartes;
     }
 
 }
