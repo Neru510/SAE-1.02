@@ -1,59 +1,310 @@
-import static java.lang.Math.sqrt;
-
 /**
- * La classe Table représente une table de jeu contenant des cartes.
- *
- * La table est représentée graphiquement par une matrice.
- * On peut donc avoir des tables de dimensions 3x3, 3x4, 4x4, 5x5, 10x15...
- * En mémoire, la Table est représentée par un simple tableau (à une dimension)
- * Quand elle est initialisée, la table est vide.
- *
- * Pour désigner une carte sur la table, on utilise des coordonnées (i,j) ou i représenta la ligne et j la colonne.
- * Les lignes et colonnes sont numérotés à partir de 1.
- * Les cartes sont numérotées à partir de 1.
- *
- * Par exemple, sur une table 3x3, la carte en position (1,1) est la premiere carte du tableau, soit celle à l'indice 0.
- * La carte (2,1) => carte numéro 4 stockée à l'indice 3 dans le tableau représentant la table
- * La carte (3,3) => carte numéro 9 stockée à l'indice 8 dans le tableau représentant la table
+ * La classe Paquet représente un paquet de cartes.
+ * Les cartes sont stockées dans un tableau fixe et un indice (entier) permet de connaître le nombre de cartes
+ * restantes (non piochées) dans le paquet. Quand on pioche, cet indice diminue.
+ * Dans les traitements, on considère alors seulement les cartes se trouvant entre 0 et cet indice (exclus).
+ * Par conséquent, on ne supprime pas vraiment les cartes piochées, on les ignore juste.
+ * On a donc besoin de connaître :
+ * - Le tableau stockant les cartes.
+ * - Le nombre de cartes restantes dans le paquet.
  */
-public class Table {
-    private int [] tableau;
-    private Carte [] cartes;
+public class Paquet {
+    public static Carte [] ensTab;
+    public int nbCarteRestantes;
+
     /**
-     * Pre-requis : hautenur >=3, largeur >=3
+     * Pre-requis : figures.length > 0, couleurs.length > 0, textures.length > 0, nbFiguresMax > 0
      *
-     * Action : Construit une table "vide" avec les dimensions précisées en paramètre.
+     * Action : Construit un paquet de cartes mélangé contenant toutes les cartes incluant 1 à nbFiguresMax figures
+     * qu'il est possibles de créer en combinant les différentes figures, couleurs et textures précisées en paramètre.
+     * Bien sûr, il n'y a pas de doublons.
      *
-     * Exemple : hauteur : 3, largeur : 3 => construit une table 3x3 (pouvant donc accueillir 9 cartes).
+     * Exemple :
+     *  - couleurs = [Rouge, Jaune]
+     *  - nbFiguresMax = 2
+     *  - figures = [A, B]
+     *  - textures = [S, T]
+     *  Génère un paquet (mélangé) avec toutes les combinaisons de cartes possibles pour ces caractéristiques : 1-A-S (rouge), 1-A-T (rouge), etc...
      */
 
-    public Table(int hauteur, int largeur){
-        this.tableau = new int [hauteur * largeur];
+    /**public Paquet(Couleur[] couleurs, int nbFiguresMax, Figure[] figures, Texture[] textures) {
+     ensTab = new Carte[ getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures)];
+     for (int i = 0; i < getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures); i++){
+     for (int n = 1; n < nbFiguresMax+1; n++){
+     for (int f = 0; f < figures.length; f++){
+     for (int t = 0; t < textures.length; t++){
+     for (int c = 0; c < couleurs.length; c++){
+     this.ensTab[i] = new Carte(couleurs[c], n, figures[f], textures[t]);
+     }
+     }
+     }
+     }
+     }
+     nbCarteRestantes = ensTab.length;
+     //rajouter fonction mélanger ici
+     }*/
+    public Paquet(Couleur[] couleurs, int nbFiguresMax, Figure[] figures, Texture[] textures) {
+        ensTab = new Carte[ getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures)];
+        int i = 0;
+        for (int c = 0; c < couleurs.length; c++){
+            for (int n = 1; n < nbFiguresMax+1; n++){
+                for (int f = 0; f < figures.length; f++){
+                    for (int t = 0; t < textures.length; t++){
+                        this.ensTab[i] = new Carte(couleurs[c], n, figures[f], textures[t]);
+                        i = i+1;
+                    }
+                }
+            }
+        }
+        nbCarteRestantes = ensTab.length;
+        //rajouter fonction mélanger ici
+    }
+
+    public Paquet(){
+        this(Couleur.values(), 3, Figure.values(), Texture.values());
     }
 
     /**
-     * Résultat : Le nombre de cartes que la table peut stocker.
+     * Action : Construit un paquet par recopie en copiant les données du paquet passé en paramètre.
      */
-    public int getTaille() {
-        return tableau.length;
+
+    public Paquet(Paquet paquet) {
+        for (int i = 0; i < paquet.ensTab.length; i++){
+            this.ensTab[i] = paquet.ensTab[i];
+        }
+        this.nbCarteRestantes = paquet.nbCarteRestantes;
+    }
+
+
+    /**
+     * Pre-requis : figures.length > 0, couleurs.length > 0, textures.length > 0, nbFiguresMax > 0
+     *
+     * Resultat : Le nombre de cartes uniques contenant entre 1 et nbFiguresMax figures qu'il est possible de générer en
+     * combinant les différentes figures, couleurs et textures précisées en paramètre.
+     */
+
+    public static int getNombreCartesAGenerer(Couleur[] couleurs, int nbFiguresMax, Figure[] figures, Texture[] textures) {
+        int total;
+        int nbCouleur = couleurs.length;
+        int nbFigure = figures.length;
+        int nbTexture = textures.length;
+
+        total = nbCouleur * nbFigure * nbTexture * nbFiguresMax;
+
+        return total;
     }
 
     /**
-     * Action : Affichage des cartes de la table mise en parametre sous forme de ligne
+     * Action : Mélange aléatoirement les cartes restantes dans le paquet.
+     * Attention, on rappelle que le paquet peut aussi contenir des cartes déjà piochées qu'il faut ignorer.
      */
-    public static String ligneDeXCarte(Carte [] paquet){
+
+    public void melanger() {
+        int r1, r2;
+        for (int i = 0; i < nbCarteRestantes; i++){
+            r1 = Ut.randomMinMax(0, nbCarteRestantes-1);
+            r2 = Ut.randomMinMax(0, nbCarteRestantes-1);
+            swap(r1, r2);
+        }
+    }
+
+    /**
+     * Prérequis : r1 et r2 sont plus petits que nbCarteRestantes - 1
+     * Action : échange deux cartes dont les indices sont donnés en paramètre
+     */
+    public void swap(int r1, int r2){
+        if (r1!=r2) {
+            Carte c1 = new Carte(ensTab[r1].getCouleur(), ensTab[r1].getNbFigures(), ensTab[r1].getFigure(), ensTab[r1].getTexture());
+            Carte c2 = new Carte(ensTab[r2].getCouleur(), ensTab[r2].getNbFigures(), ensTab[r2].getFigure(), ensTab[r2].getTexture());
+            ensTab[r1] = c2;
+            ensTab[r2] = c1;
+        }
+    }
+
+    /**
+     * Action : Calcule et renvoie un paquet trié à partir du paquet courant (this) selon la méthode du tri selection.
+     * Le tri est effectué à partir des données du paquet courant (this) mais celui-ci ne doit pas être modifié !
+     * Une nouvelle instance du paquet est traitée et renvoyée.
+     * On rappelle que le paquet peut aussi contenir des cartes déjà piochées qu'il faut ignorer (voir partie 2 de la SAE).
+     * Le tri doit fonctionner que le Paquet soit plein ou non.
+     * https://www.youtube.com/watch?v=Ns4TPTC8whw&t=2s vidéo explicative
+     */
+
+    public Paquet trierSelection() {
+        Paquet paquetTrier = new Paquet(this);
+        int min;
+        for (int i = 0; i < paquetTrier.nbCarteRestantes; i++){
+            min = i;
+            for (int j = i+1; j < paquetTrier.nbCarteRestantes; j++){
+                if (paquetTrier.getCarteX(min).compareTo(paquetTrier.getCarteX(j)) < 0){
+                    min = j;
+                }
+            }
+            paquetTrier.swap(i, min);
+        }
+        //copie paquet
+        return paquetTrier;
+    }
+
+
+    /**
+     * Action : Calcule et renvoie un paquet trié à partir du paquet courant (this) selon la méthode du tri bulles.
+     * Le tri est effectué à partir des données du paquet courant (this) mais celui-ci ne doit pas être modifié !
+     * Une nouvelle instance du paquet est traitée et renvoyée.
+     * On rappelle que le paquet peut aussi contenir des cartes déjà piochées  qu'il faut ignorer (voir partie 2 de la SAE).
+     * Le tri doit fonctionner que le Paquet soit plein ou non.
+     * https://www.youtube.com/watch?v=lyZQPjUT5B4&embeds_referring_euri=https%3A%2F%2Fwww.developpez.com%2F&source_ve_path=Mjg2NjY&feature=emb_logo
+     * vidéo explicative
+     */
+
+    public Paquet trierBulles() {
+        Paquet paquetTrier = new Paquet(this);
+        for (int i = paquetTrier.nbCarteRestantes; 0 < i; i--) {
+            for (int j = 0; j < i - 1; j++) {
+                if (paquetTrier.getCarteX(j).compareTo(paquetTrier.getCarteX(j+1)) < 0) {
+                    swap(j, j+1);
+                }
+            }
+        }
+        return paquetTrier;
+    }
+
+    /**
+     * Action : Calcule et renvoie un paquet trié à partir du paquet courant (this) selon la méthode du tri insertion.
+     * Le tri est effectué à partir des données du paquet courant (this) mais celui-ci ne doit pas être modifié !
+     * Une nouvelle instance du paquet est traitée et renvoyée.
+     * On rappelle que le paquet peut aussi contenir des cartes déjà piochées  qu'il faut ignorer (voir partie 2 de la SAE).
+     * Le tri doit fonctionner que le Paquet soit plein ou non.
+     * https://www.youtube.com/watch?v=ROalU379l3U&t=1s : vidéo explicative
+     */
+
+    public Paquet trierInsertion() {
+        Paquet paquetTrier = new Paquet(this);
+        int k;
+        Carte temp;
+        for (int i = 1; i < paquetTrier.nbCarteRestantes; i++){
+            temp = paquetTrier.getCarteX(i);
+            k = i;
+            while (k > 0 && temp.compareTo(paquetTrier.getCarteX(k-1)) > 0){
+                swap(k, k-1);
+                k = k-1;
+            }
+        }
+        return paquetTrier;
+    }
+
+    /**
+     * Action : Permet de tester les différents tris.
+     * On doit s'assurer que chaque tri permette effectivement de trier un paquet mélangé.
+     * Des messages d'informations devront être affichés.
+     * La méthode est "static" et ne s'effectue donc pas sur la paquet courant "this".
+     */
+
+    public long testTriSelec(){
+        Runnable runnable = () -> {
+            this.trierSelection();
+        };
+        return Ut.getTempsExecution(runnable);
+    }
+
+    public long testTriBulle(){
+        Runnable runnable = () -> {
+            this.trierBulles();
+        };
+        return Ut.getTempsExecution(runnable);
+    }
+
+    public long testTriInser(){
+        Runnable runnable = () -> {
+            this.trierInsertion();
+        };
+        return Ut.getTempsExecution(runnable);
+    }
+
+    public static void testTrit(){
+        Couleur [] listeDeCouleur = Couleur.values();
+        Figure [] listeDeFigure = Figure.values();
+        Texture [] listeDeTexture= Texture.values();
+
+        Paquet jeu1 = new Paquet(listeDeCouleur, 1000, listeDeFigure, listeDeTexture);
+        System.out.println("Nous allons tester différent trie sur un paquet de " + jeu1.nbCarteRestantes + " cartes");
+        jeu1.melanger();
+        System.out.println("Tri Selection = " + jeu1.testTriSelec() + "ms");
+        System.out.println("Tri Bulle = " + jeu1.testTriBulle() + "ms");
+        System.out.println("Tri Insertion = " + jeu1.testTriInser() + "ms");
+    }
+
+    /**
+     * Pre-requis : 0 < nbCartes <= nombre de cartes restantes dans le paquet.
+     *
+     * Action : Pioche nbCartes Cartes au dessus du Paquet this (et met à jour son état).
+     *
+     * Résultat : Un tableau contenant les nbCartes Cartes piochees dans le Paquet.
+     *
+     * Exemple :
+     * Contenu paquet : [A,B,C,D,E,F,G]
+     * Nombre de cartes restantes : 5. On considère donc seulement les cartes de 0 à 4.
+     *
+     * piocher(3)
+     * Contenu paquet : [A,B,C,D,E,F,G]
+     * Nombre de cartes restantes : 2
+     * Renvoie [E,D,C]
+     */
+
+    public Carte[] piocher(int nbCartes) {
+        Carte [] cartesPiocher = null;
+        if (peutPiocher(nbCartes)){
+            cartesPiocher = new Carte[nbCartes];
+            int x = 0;
+            for (int pioche = this.nbCarteRestantes; (this.nbCarteRestantes-nbCartes) < pioche; pioche--){
+                cartesPiocher[x] = getCarteX(pioche-1);
+                x = x +1;
+            }
+            this.nbCarteRestantes = this.nbCarteRestantes - nbCartes;
+        }
+        return cartesPiocher;
+    }
+
+    /**
+     * Résultat : Vrai s'il reste assez de cartes dans le paquet pour piocher nbCartes.
+     */
+
+    public boolean peutPiocher(int nbCartes) {
+        return this.nbCarteRestantes >= nbCartes;
+    }
+
+    /**
+     * Résultat : Vrai s'il ne reste plus aucune cartes dans le paquet.
+     */
+
+    public boolean estVide() {
+        return this.nbCarteRestantes == 0;
+    }
+
+    /**
+     * Résultat : Une chaîne de caractères représentant le paquet sous la forme d'un tableau
+     * [X, Y, Z...] représentant les cartes restantes dans le paquet.
+     *
+     * Exemple :
+     * Contenu paquet : 1-O-P (rouge), 2-C-V (jaune), 3-L-P (jaune), 3-L-P (rouge), 1-L-V (bleu)
+     * Nombre de cartes restantes : 3
+     * Retourne [1-O-P, 2-C-V, 3-L-P] (et chaque représentation d'une carte est coloré selon la couleur de la carte...)
+     */
+
+    @Override
+    public String toString() {
         String texte = "";
         int min = 0;
         int y = min;
         char value ;
-        for (int x = 0; x < 5; x++){
-            for (int c = 0; c < paquet.length; c++){
-                value = paquet[c].toString().charAt(y);
+        for (int x = 0; x <5; x++){
+            for (int c = 0; c < nbCarteRestantes; c++){
+                value = ensTab[c].toString().charAt(y);
                 y = min;
                 while (value != '\n'){
-                    value = paquet[c].toString().charAt(y);
-                    if (paquet[c].toString().charAt(y) != '\n'){
-                        texte = texte + paquet[c].toString().charAt(y);
+                    value = ensTab[c].toString().charAt(y);
+                    if (ensTab[c].toString().charAt(y) != '\n'){
+                        texte = texte + ensTab[c].toString().charAt(y);
                     }
                     y= y+1;
                 }
@@ -62,150 +313,16 @@ public class Table {
             min = min+25;
             texte = texte + '\n';
         }
-        return texte;
-    }
-
-    /**
-     * Pre-requis : la table est pleine
-     * Action : Affiche des cartes de la table sous forme de matrice
-     * L'affichage des cartes doit respecter le format défini dans la classe Carte (chaque carte doit donc être colorée).
-     * On ne donne volontairement pas d'exemple puisque celà depend du choix fait pour votre représentation de Carte
-     */
-    private int[] getDimension(){
-        int taille = this.tableau.length;
-        float valueR = (float) sqrt(taille);
-        int value1;
-        int value2;
-        if (valueR%1==0 ){
-            value1 = (int) valueR;
-            value2 = (int) valueR;
+        if (this.nbCarteRestantes < 2){
+            texte = texte + "Carte restante : " + this.nbCarteRestantes;
         }else {
-            if (taille%10 == 0){
-                value1 = 10;
-            }else if (taille%5 == 0){
-                value1 = 5;
-            }else if (taille%3 == 0){
-                value1 = 3;
-            }else{
-                value1 = 2;
-            }
-            value2 = taille/value1;
-        }
-        return new int[]{value1, value2};
-    }
-
-    public String toString() {
-        String texte = "";
-        Carte [] ligne;
-        ligne = new Carte[getDimension()[0]];
-        int i = 0;
-        for (int x = 0; x < tableau.length; x ++){
-            ligne[i] = cartes[x];
-            if ((x+1)%getDimension()[0] == 0){
-                texte = texte + ligneDeXCarte(ligne) + "\n";
-                ligne = new Carte[getDimension()[0]];
-                i = -1;
-            }
-            i = i + 1;
+            texte = texte + "Cartes restantes : " + this.nbCarteRestantes;
         }
         return texte;
     }
 
-    /**
-     * Résullat : Vrai la carte située aux coordonnées précisées en paramètre est une carte possible pour la table.
-     */
-    public boolean carteExiste(Coordonnees coordonnees) {
-        boolean value = false;
-        int[] xy = getDimension();
-        if (0 <= coordonnees.getLigne() && coordonnees.getLigne() < xy[0] && 0 <= coordonnees.getColonne() && coordonnees.getColonne() < xy[1]){
-            value = true;
-        }
-        return value;
+    // temp ============================================================================================================
+    public Carte getCarteX(int x){
+        return ensTab[x];
     }
-
-    /**
-     * Pre-requis :
-     *  Il reste des cartes sur la table.
-     *
-     * Action : Fait sélectionner au joueur (par saisie de ses coordonnées) une carte valide (existante) de la table.
-     * L'algorithme doit faire recommencer la saisie au joueur s'il ne saisit pas une carte valide.
-     *
-     * Résullat : Le numéro de carte sélectionné.
-     *
-     */
-    private int getPositionByCoordonnes(Coordonnees co){
-        int value = 0;
-        for (int x = 0; x<co.getLigne()-1; x++){
-            value = value + getDimension()[1];
-        }
-        value = value + co.getColonne();
-        return value;
-    }
-
-    public int faireSelectionneUneCarte() {
-        int [] dimension = this.getDimension();
-        System.out.println("Saisissez les coordonné de la carte souhaitée au format ''x,y'' : ");
-        String texte = Ut.saisirChaine();
-        if (Coordonnees.formatEstValide(texte)){
-            Coordonnees coordonne = new Coordonnees(texte);
-            if (carteExiste(coordonne)){
-                return getPositionByCoordonnes(coordonne);
-            }
-        }
-        return faireSelectionneUneCarte();
-    }
-
-    /**
-     * Pre-requis : 1<=nbCartes <= nombre de Cartes de this
-     * Action : Fait sélectionner nbCartes Cartes au joueur sur la table en le faisant recommencer jusqu'à avoir une sélection valide.
-     * Il ne doit pas y avoir de doublons dans les numéros de cartes sélectionnées.
-     * Résullat : Un tableau contenant les numéros de cartes sélectionnées.
-     */
-    private boolean intInTab(int v, int[] tableau){
-        boolean value = false;
-        int fini = 0;
-        while (fini < tableau.length && !value){
-            if (tableau[fini] == v){
-                value = true;
-            }
-            fini = fini +1;
-        }
-        return value;
-    }
-
-    public int[] selectionnerCartesJoueur(int nbCartes) {
-        int [] carteSelect = new int[nbCartes];
-        int ajout = 0;
-        int carte;
-
-        while (ajout < nbCartes){
-            carte = faireSelectionneUneCarte();
-            if (!intInTab(carte, carteSelect)){
-                carteSelect[ajout] = carte;
-                ajout = ajout+1;
-            }
-        }
-        return carteSelect;
-    }
-
-    /**
-     * Action : Affiche les cartes de la table correspondantes aux numéros de cartes contenus dans selection
-     * Exemple de format d'affichage : "Sélection : 2-O-H 3-O-H 2-C-H"
-     * Les cartes doivent être affichées "colorées"
-     */
-
-    public void afficherSelection(int[] selection) {
-        Carte [] cartesAffiche = new Carte[selection.length];
-        for (int x =0; x < selection.length; x++){
-            cartesAffiche[x] = this.cartes[selection[x]];
-        }
-        System.out.println(ligneDeXCarte(cartesAffiche));
-    }
-
-    public void setCartes(Carte [] cartes){
-        this.cartes = cartes;
-    }
-
-    public Carte[] getCartes(){return cartes;}
-
 }
