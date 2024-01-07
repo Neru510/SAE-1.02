@@ -39,7 +39,7 @@ public class Jeu {
      */
 
     public Jeu() {
-
+        resetJeu();
     }
 
     /**
@@ -48,7 +48,12 @@ public class Jeu {
      */
 
     public void piocherEtPlacerNouvellesCartes(int[] numerosDeCartes) {
-
+        Carte[] cartes = paquet.piocher(numerosDeCartes.length);
+        Carte[] cartesTable = table.getCartes();
+        for (int i = 0; i < numerosDeCartes.length; i++){
+            cartesTable[numerosDeCartes[i]] = cartes[i];
+        }
+        table.setCartes(cartes);
     }
 
     /**
@@ -56,15 +61,54 @@ public class Jeu {
      */
 
     public void resetJeu() {
-
+        this.score = 0;
+        this.paquet = new Paquet();
+        this.table = new Table(3, 3);
+        table.setCartes(paquet.piocher(table.getTaille()));
     }
 
     /**
      * Résullat : Vrai si les cartes passées en paramètre forment un E3C.
      */
+    private static boolean couleurE3C(Carte[] cartes) {
+        boolean value = false;
+        if (cartes[0].getCouleur().equals(cartes[1].getCouleur()) && cartes[1].getCouleur().equals(cartes[2].getCouleur())){
+            value = true;
+        }else if (!(cartes[0].getCouleur().equals(cartes[1].getCouleur())) && !(cartes[1].getCouleur().equals(cartes[2].getCouleur()))&& !(cartes[0].getCouleur().equals(cartes[2].getCouleur()))){
+            value = true;
+        }
+        return value;
+    }
+    private static boolean textureE3C(Carte[] cartes) {
+        boolean value = false;
+        if (cartes[0].getTexture().equals(cartes[1].getTexture()) && cartes[1].getTexture().equals(cartes[2].getTexture())){
+            value = true;
+        }else if (!(cartes[0].getTexture().equals(cartes[1].getTexture())) && !(cartes[1].getTexture().equals(cartes[2].getTexture()))&& !(cartes[0].getTexture().equals(cartes[2].getTexture()))){
+            value = true;
+        }
+        return value;
+    }
+    private static boolean figureE3C(Carte[] cartes) {
+        boolean value = false;
+        if (cartes[0].getFigure().equals(cartes[1].getFigure()) && cartes[1].getFigure().equals(cartes[2].getFigure())){
+            value = true;
+        }else if (!(cartes[0].getFigure().equals(cartes[1].getFigure())) && !(cartes[1].getFigure().equals(cartes[2].getFigure()))&& !(cartes[0].getFigure().equals(cartes[2].getFigure()))){
+            value = true;
+        }
+        return value;
+    }
+    private static boolean nbE3C(Carte[] cartes) {
+        boolean value = false;
+        if (cartes[0].getNbFigures() == (cartes[1].getNbFigures()) && cartes[1].getNbFigures() == (cartes[2].getNbFigures())){
+            value = true;
+        }else if (!(cartes[0].getNbFigures() == (cartes[1].getNbFigures())) && !(cartes[1].getNbFigures() == (cartes[2].getNbFigures()))&& !(cartes[0].getNbFigures() == (cartes[2].getNbFigures()))){
+            value = true;
+        }
+        return value;
+    }
 
     public static boolean estUnE3C(Carte[] cartes) {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        return (nbE3C(cartes) && figureE3C(cartes) && textureE3C(cartes) && couleurE3C(cartes));
     }
 
     /**
@@ -93,7 +137,7 @@ public class Jeu {
      */
 
     public boolean partieEstTerminee() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+        return this.paquet.estVide();
     }
 
     /**
@@ -107,6 +151,7 @@ public class Jeu {
      */
 
     public void jouerTourHumain() {
+        table.toString();
 
     }
 
@@ -116,7 +161,7 @@ public class Jeu {
      */
 
     public void jouerHumain() {
-
+        jouerTourHumain();
     }
 
     /**
