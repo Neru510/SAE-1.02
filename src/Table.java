@@ -117,7 +117,7 @@ public class Table {
     public boolean carteExiste(Coordonnees coordonnees) {
         boolean value = false;
         int[] xy = getDimension();
-        if (0 < coordonnees.getLigne() && coordonnees.getLigne() <= xy[0] && 0 < coordonnees.getColonne() && coordonnees.getColonne() <= xy[1]){
+        if (0 <= coordonnees.getLigne() && coordonnees.getLigne() < xy[0] && 0 <= coordonnees.getColonne() && coordonnees.getColonne() < xy[1]){
             value = true;
         }
         return value;
@@ -205,5 +205,7 @@ public class Table {
     public void setCartes(Carte [] cartes){
         this.cartes = cartes;
     }
+
+    public Carte[] getCartes(){return cartes;}
 
 }
