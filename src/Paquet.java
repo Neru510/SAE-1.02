@@ -44,7 +44,7 @@ public class Paquet {
      //rajouter fonction mélanger ici
      }*/
     public Paquet(Couleur[] couleurs, int nbFiguresMax, Figure[] figures, Texture[] textures) {
-        ensTab = new Carte[ getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures)];
+        ensTab = new Carte[getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures)];
         int i = 0;
         for (int c = 0; c < couleurs.length; c++){
             for (int n = 1; n < nbFiguresMax+1; n++){
@@ -137,7 +137,7 @@ public class Paquet {
         for (int i = 0; i < paquetTrier.nbCarteRestantes; i++){
             min = i;
             for (int j = i+1; j < paquetTrier.nbCarteRestantes; j++){
-                if (paquetTrier.getCarteX(min).compareTo(paquetTrier.getCarteX(j)) < 0){
+                if (paquetTrier.ensTab[min].compareTo(paquetTrier.ensTab[j]) < 0){
                     min = j;
                 }
             }
@@ -164,7 +164,7 @@ public class Paquet {
         boolean check = false;
         for (int i = paquetTrier.nbCarteRestantes; !check && 0 < i; i--) {
             for (int j = 0; j < i - 1; j++) {
-                if (paquetTrier.getCarteX(j).compareTo(paquetTrier.getCarteX(j+1)) < 0) {
+                if (paquetTrier.ensTab[j].compareTo(paquetTrier.ensTab[j+1]) < 0) {
                     paquetTrier.swap(j, j+1);
                     compteur = compteur + 1;
                 }
@@ -191,11 +191,9 @@ public class Paquet {
     public Paquet trierInsertion() {
         Paquet paquetTrier = new Paquet(this);
         int k;
-        Carte temp;
         for (int i = 1; i < paquetTrier.nbCarteRestantes; i++){
-            temp = paquetTrier.getCarteX(i);
             k = i;
-            while (k > 0 && temp.compareTo(paquetTrier.getCarteX(k-1)) > 0){
+            while (k > 0 && paquetTrier.ensTab[i].compareTo(paquetTrier.ensTab[k-1]) > 0){
                 paquetTrier.swap(k, k-1);
                 k = k-1;
             }
