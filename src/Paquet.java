@@ -9,7 +9,7 @@
  * - Le nombre de cartes restantes dans le paquet.
  */
 public class Paquet {
-    public static Carte [] ensTab;
+    public Carte [] ensTab;
     public int nbCarteRestantes;
 
     /**
@@ -69,6 +69,7 @@ public class Paquet {
      */
 
     public Paquet(Paquet paquet) {
+        this.ensTab = new Carte[paquet.ensTab.length];
         for (int i = 0; i < paquet.ensTab.length; i++){
             this.ensTab[i] = paquet.ensTab[i];
         }
@@ -159,11 +160,20 @@ public class Paquet {
 
     public Paquet trierBulles() {
         Paquet paquetTrier = new Paquet(this);
-        for (int i = paquetTrier.nbCarteRestantes; 0 < i; i--) {
+        int compteur = 0;
+        boolean check = false;
+        for (int i = paquetTrier.nbCarteRestantes; !check && 0 < i; i--) {
             for (int j = 0; j < i - 1; j++) {
                 if (paquetTrier.getCarteX(j).compareTo(paquetTrier.getCarteX(j+1)) < 0) {
-                    swap(j, j+1);
+                    paquetTrier.swap(j, j+1);
+                    compteur = compteur + 1;
                 }
+            }
+            if (compteur > 0){
+                compteur = 0;
+            }
+            else {
+                check = true;
             }
         }
         return paquetTrier;
@@ -186,7 +196,7 @@ public class Paquet {
             temp = paquetTrier.getCarteX(i);
             k = i;
             while (k > 0 && temp.compareTo(paquetTrier.getCarteX(k-1)) > 0){
-                swap(k, k-1);
+                paquetTrier.swap(k, k-1);
                 k = k-1;
             }
         }
@@ -201,27 +211,21 @@ public class Paquet {
      */
 
     public long testTriSelec(){
-        Runnable runnable = () -> {
-            this.trierSelection();
-        };
+        Runnable runnable = this::trierSelection;
         return Ut.getTempsExecution(runnable);
     }
 
     public long testTriBulle(){
-        Runnable runnable = () -> {
-            this.trierBulles();
-        };
+        Runnable runnable = this::trierBulles;
         return Ut.getTempsExecution(runnable);
     }
 
     public long testTriInser(){
-        Runnable runnable = () -> {
-            this.trierInsertion();
-        };
+        Runnable runnable = this::trierInsertion;
         return Ut.getTempsExecution(runnable);
     }
 
-    public static void testTrit(){
+    public static void testTri(){
         Couleur [] listeDeCouleur = Couleur.values();
         Figure [] listeDeFigure = Figure.values();
         Texture [] listeDeTexture= Texture.values();
@@ -308,7 +312,7 @@ public class Paquet {
                     }
                     y= y+1;
                 }
-                texte = texte+Couleur.getAnnuler() + " ";
+                texte = texte + Couleur.getAnnuler() + " ";
             }
             min = min+25;
             texte = texte + '\n';
@@ -321,8 +325,11 @@ public class Paquet {
         return texte;
     }
 
+
+
     // temp ============================================================================================================
     public Carte getCarteX(int x){
         return ensTab[x];
     }
+
 }
