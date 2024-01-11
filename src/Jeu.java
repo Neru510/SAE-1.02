@@ -245,7 +245,22 @@ public class Jeu {
      * Divers messages d'informations doivent être affichés pour l'ergonomie.
      */
 
-    public void joueurTourOrdinateur() {
+    public void jouerTourOrdinateur() {
+        int [] cartes = chercherE3CSurTableOrdinateur();
+        System.out.println("|                    [Début du tour de l'ordinateur]                    |");
+        System.out.println('\n'+table.toString());
+        System.out.print("Recherche E3C : ");
+        Ut.pause(500);
+        System.out.println((cartes != null)+"\n");
+        if (cartes != null){
+            System.out.println("Saisie des coordonnées des cartes");
+            System.out.println("Affichage des cartes");
+            Ut.pause(1000);
+            table.afficherSelection(cartes);
+        } else{
+            cartes = selectionAleatoireDeCartesOrdinateur();
+        }
+        piocherEtPlacerNouvellesCartes(cartes);
 
     }
 
@@ -257,7 +272,7 @@ public class Jeu {
      */
 
     public void jouerOrdinateur() {
-
+        jouerTourOrdinateur();
     }
 
     /**

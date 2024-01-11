@@ -157,6 +157,21 @@ public class Table {
     }
 
     /**
+     * Renvoie la carte numero x
+     **/
+    public Carte getCarteByIndex(int x){
+        return cartes[x-1];
+    }
+
+    public Carte [] getTableauCarteByIndex(int [] x){
+        Carte [] Cartes = new Carte[x.length];
+        for (int i = 0; i < x.length; i++){
+            Cartes[i] = cartes[x[i]];
+        }
+        return Cartes;
+    }
+
+    /**
      * Pre-requis : 1<=nbCartes <= nombre de Cartes de this
      * Action : Fait sélectionner nbCartes Cartes au joueur sur la table en le faisant recommencer jusqu'à avoir une sélection valide.
      * Il ne doit pas y avoir de doublons dans les numéros de cartes sélectionnées.
@@ -197,7 +212,7 @@ public class Table {
     public void afficherSelection(int[] selection) {
         Carte [] cartesAffiche = new Carte[selection.length];
         for (int x =0; x < selection.length; x++){
-            cartesAffiche[x] = this.cartes[selection[x]];
+            cartesAffiche[x] = this.cartes[selection[x]-1];
         }
         System.out.println(ligneDeXCarte(cartesAffiche));
     }
