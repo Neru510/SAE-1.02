@@ -9,5 +9,4 @@ public enum Texture {
     Texture(char forme){ this.forme = forme;}
 
     public char getForme(){return this.forme;}
-
 }

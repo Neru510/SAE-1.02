@@ -58,6 +58,7 @@ public class Paquet {
         }
         nbCarteRestantes = ensTab.length;
         //rajouter fonction mélanger ici
+        this.melanger();
     }
 
     public Paquet(){
@@ -143,7 +144,6 @@ public class Paquet {
             }
             paquetTrier.swap(i, min);
         }
-        //copie paquet
         return paquetTrier;
     }
 

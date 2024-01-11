@@ -50,10 +50,19 @@ public class Coordonnees {
      * Aide : On peut utiliser Ut.estNombre pour vérifier qu'une chaîne de caractères est bien un nombre.
      */
     public static boolean formatEstValide(String input){
+        boolean check;
         String[] splited = input.split(",");
         if (splited.length!=2){
-            return false;
+            check = false;
         }
-        else return Ut.estNombre(splited[0]) && Ut.estNombre(splited[1]);
+        else {
+            if (splited[0].equals("0")){
+                check = false;
+            }
+            else {
+                check = true;
+            }
+        }
+        return check;
     }
 }

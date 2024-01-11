@@ -71,7 +71,7 @@ public class Table {
      * L'affichage des cartes doit respecter le format défini dans la classe Carte (chaque carte doit donc être colorée).
      * On ne donne volontairement pas d'exemple puisque celà depend du choix fait pour votre représentation de Carte
      */
-    private int[] getDimension(){
+    public int[] getDimension(){
         int taille = this.tableau.length;
         float valueR = (float) sqrt(taille);
         int value1;
@@ -99,7 +99,7 @@ public class Table {
         Carte [] ligne;
         ligne = new Carte[getDimension()[0]];
         int i = 0;
-        for (int x = 0; x < tableau.length; x ++){
+        for (int x = 0; x < tableau.length; x++){
             ligne[i] = cartes[x];
             if ((x+1)%getDimension()[0] == 0){
                 texte = texte + ligneDeXCarte(ligne) + "\n";
@@ -133,7 +133,7 @@ public class Table {
      * Résullat : Le numéro de carte sélectionné.
      *
      */
-    private int getPositionByCoordonnes(Coordonnees co){
+    public int getPositionByCoordonnes(Coordonnees co){
         int value = 0;
         for (int x = 0; x<co.getLigne()-1; x++){
             value = value + getDimension()[1];
@@ -144,11 +144,12 @@ public class Table {
 
     public int faireSelectionneUneCarte() {
         int [] dimension = this.getDimension();
-        System.out.println("Saisissez les coordonné de la carte souhaitée au format ''x,y'' : ");
+        System.out.println("Saisissez les coordonné de la carte souhaitée au format 'x,y' : ");
         String texte = Ut.saisirChaine();
         if (Coordonnees.formatEstValide(texte)){
             Coordonnees coordonne = new Coordonnees(texte);
             if (carteExiste(coordonne)){
+                System.out.println(getPositionByCoordonnes(coordonne));
                 return getPositionByCoordonnes(coordonne);
             }
         }
@@ -177,7 +178,6 @@ public class Table {
         int [] carteSelect = new int[nbCartes];
         int ajout = 0;
         int carte;
-
         while (ajout < nbCartes){
             carte = faireSelectionneUneCarte();
             if (!intInTab(carte, carteSelect)){

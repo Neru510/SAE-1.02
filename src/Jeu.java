@@ -1,3 +1,6 @@
+import java.nio.channels.SelectableChannel;
+import java.util.Scanner;
+
 /**
  * La classe Jeu permet de faire des parties du jeu "E3Cète" soit avec un humain, soit avec un ordinateur.
  *
@@ -30,7 +33,7 @@ public class Jeu {
 
     private Paquet paquet;
     private Table table;
-    private int score;
+    private int score = 0;
 
     /**
      * Action :
@@ -118,22 +121,54 @@ public class Jeu {
      *  - Sinon, la valeur null.
      */
 
-    public int[] chercherE3CSurTableOrdinateur() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+    public int[] chercherE3CSurTableOrdinateur() {//toi
+        int [] positionE3C = null;
+        boolean value;
+        for (int c1 = 1; c1 < table.getTaille()+1; c1++){
+            for (int c2 = 1; c2 < table.getTaille()+1; c2++){
+                for (int c3 = 1; c3 < table.getTaille()+1; c3++){
+                    if (c1 != c2 && c1 != c3 && c2 != c3){
+                        value = estUnE3C(new Carte[] {table.getCarteByIndex(c1), table.getCarteByIndex(c2), table.getCarteByIndex(c3)});
+                        if (value){
+                            positionE3C = new int [] {c1, c2, c3};
+                        }
+                    }
+                }
+            }
+        }
+        return positionE3C;
     }
 
     /**
      * Action : Sélectionne alétoirement trois cartes sur la table.
      * La sélection ne doit pas contenir de doublons
-     * Résullat : un tableau contenant les numéros des cartes sélectionnées alétaoirement
+     * Résultat : un tableau contenant les numéros des cartes sélectionnées aléatoirement
      */
 
-    public int[] selectionAleatoireDeCartesOrdinateur() {
-        throw new RuntimeException("Méthode non implémentée ! Effacez cette ligne et écrivez le code nécessaire");
+    public int[] selectionAleatoireDeCartesOrdinateur() { // Pas opti (faire s'il y a encore du temps)
+        int [] tab = new int[3];
+        boolean check = false;
+        while (!check){
+            for (int i = 0; i < 3 ; i ++){
+                tab[i] = this.selectNumCarte();
+            }
+            if (tab[0] != tab[1] && tab[0] != tab[2] && tab[1] != tab[2]){
+                check = true;
+            }
+        }
+        return tab;
+    }
+
+    public int selectNumCarte(){
+        int [] dimensions = this.table.getDimension();
+        int x = Ut.randomMinMax(0,dimensions[0]);
+        int y = Ut.randomMinMax(0,dimensions[1]);
+        Coordonnees co = new Coordonnees(x,y);
+        return this.table.getPositionByCoordonnes(co);
     }
 
     /**
-     * Résullat : Vrai si la partie en cours est terminée.
+     * Résultat : Vrai si la partie en cours est terminée.
      */
 
     public boolean partieEstTerminee() {
@@ -151,8 +186,21 @@ public class Jeu {
      */
 
     public void jouerTourHumain() {
-        table.toString();
-
+        System.out.println("|                      [Début du tour de l'Humain]                      |");
+        Carte [] cartes = new Carte[3];
+        int [] cartesnum = new int[3];
+        System.out.println(table.toString());
+        cartesnum = table.selectionnerCartesJoueur(3);
+        cartes = table.getTableauCarteByIndex(cartesnum);
+        piocherEtPlacerNouvellesCartes(cartesnum);
+        if (estUnE3C(cartes)){
+            score = score + 3;
+            System.out.println("Tu as gagné 3 points ! Voici ton nouveau score : " + score);
+        }
+        else {
+            score = score - 1;
+            System.out.println("Tu as perdu 1 point ! Voici ton nouveau score : " + score);
+        }
     }
 
     /**
@@ -161,7 +209,30 @@ public class Jeu {
      */
 
     public void jouerHumain() {
+        boolean check = true;
+        boolean checkon = false;
+        while (check & !paquet.estVide()){
+            jouerTourHumain();
+            System.out.println("Voulez-vous arrêter de jouer ?");
+            while (!checkon){
+                System.out.println(" Écrivez n pour non ou o pour oui");
+                Scanner clavier = new Scanner(System.in);
+                String s = clavier.nextLine();
+                if (s.equals("o")){
+                    check = false;
+                    checkon = true;
+                }
+                else if (s.equals("n")){
+                    checkon = true;
+                }
+                else {
+                    checkon = false;
+                }
+            }
+            checkon = false;
+        }
         jouerTourHumain();
+        System.out.println("Il n'y a plus de cartes ! Voici ton score final : " + score);
     }
 
     /**
@@ -202,6 +273,31 @@ public class Jeu {
      */
 
     public void jouer() {
-
+        boolean check = false;
+        System.out.println("---------Une nouvelle partie est en cours de création---------");
+        System.out.println("Veuillez choisir qui va jouer :");
+        System.out.println("- Vous");
+        System.out.println("- Ordinateur");
+        System.out.println("- Terminer");
+        while (!check){
+            System.out.println("Entrez v pour vous, o pour l'ordinateur et t pour terminer le programme");
+            Scanner clavier = new Scanner(System.in);
+            String s = clavier.nextLine();
+            if (s.equals("v")){
+                jouerHumain();
+                resetJeu();
+            }
+            else if (s.equals("o")){
+                jouerOrdinateur();
+                resetJeu();
+            }
+            else if (s.equals("t")){
+                check = true;
+                System.out.println("Merci d'avoir joué");
+            }
+            else {
+                System.out.println("Il semble que vous n'avez pas rentré v ni o, veuillez recommencer.");
+            }
+        }
     }
 }
