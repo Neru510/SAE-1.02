@@ -148,8 +148,7 @@ public class Table {
         String texte = Ut.saisirChaine();
         if (Coordonnees.formatEstValide(texte)){
             Coordonnees coordonne = new Coordonnees(texte);
-            if (carteExiste(coordonne)){
-                System.out.println(getPositionByCoordonnes(coordonne));
+            if (carteExiste(new Coordonnees(coordonne.getLigne(), coordonne.getColonne()))){
                 return getPositionByCoordonnes(coordonne);
             }
         }
@@ -166,7 +165,7 @@ public class Table {
     public Carte [] getTableauCarteByIndex(int [] x){
         Carte [] Cartes = new Carte[x.length];
         for (int i = 0; i < x.length; i++){
-            Cartes[i] = cartes[x[i]];
+            Cartes[i] = cartes[x[i]-1];
         }
         return Cartes;
     }

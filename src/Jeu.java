@@ -51,12 +51,15 @@ public class Jeu {
      */
 
     public void piocherEtPlacerNouvellesCartes(int[] numerosDeCartes) {
-        Carte[] cartes = paquet.piocher(numerosDeCartes.length);
-        Carte[] cartesTable = table.getCartes();
-        for (int i = 0; i < numerosDeCartes.length; i++){
-            cartesTable[numerosDeCartes[i]] = cartes[i];
-        }
-        table.setCartes(cartes);
+        if (!partieEstTerminee()){
+            Carte[] cartes = paquet.piocher(numerosDeCartes.length);
+            Carte[] cartesTable = this.table.getCartes();
+            for (int i = 0; i < numerosDeCartes.length; i++){
+                cartesTable[numerosDeCartes[i]-1] = cartes[i];
+            }
+
+            this.table.setCartes(cartesTable);
+            }
     }
 
     /**
@@ -161,8 +164,8 @@ public class Jeu {
 
     public int selectNumCarte(){
         int [] dimensions = this.table.getDimension();
-        int x = Ut.randomMinMax(0,dimensions[0]);
-        int y = Ut.randomMinMax(0,dimensions[1]);
+        int x = Ut.randomMinMax(2,dimensions[0]);
+        int y = Ut.randomMinMax(2,dimensions[1]);
         Coordonnees co = new Coordonnees(x,y);
         return this.table.getPositionByCoordonnes(co);
     }
@@ -172,7 +175,13 @@ public class Jeu {
      */
 
     public boolean partieEstTerminee() {
-        return this.paquet.estVide();
+        boolean value = this.paquet.estVide();
+        if (!value){
+            if (this.paquet.nbCarteRestantes < 3){
+                value = true;
+            }
+        }
+        return value;
     }
 
     /**
@@ -192,6 +201,7 @@ public class Jeu {
         System.out.println(table.toString());
         cartesnum = table.selectionnerCartesJoueur(3);
         cartes = table.getTableauCarteByIndex(cartesnum);
+        table.afficherSelection(cartesnum);
         piocherEtPlacerNouvellesCartes(cartesnum);
         if (estUnE3C(cartes)){
             score = score + 3;
@@ -201,6 +211,7 @@ public class Jeu {
             score = score - 1;
             System.out.println("Tu as perdu 1 point ! Voici ton nouveau score : " + score);
         }
+
     }
 
     /**
@@ -255,11 +266,14 @@ public class Jeu {
         if (cartes != null){
             System.out.println("Saisie des coordonnées des cartes");
             System.out.println("Affichage des cartes");
-            Ut.pause(1000);
-            table.afficherSelection(cartes);
+            score = score + 3;
         } else{
             cartes = selectionAleatoireDeCartesOrdinateur();
+            System.out.println("Selection de cartes aléatoire");
+            score = score - 1;
         }
+        table.afficherSelection(cartes);
+        Ut.pause(1000);
         piocherEtPlacerNouvellesCartes(cartes);
 
     }
@@ -272,7 +286,13 @@ public class Jeu {
      */
 
     public void jouerOrdinateur() {
-        jouerTourOrdinateur();
+        while (!partieEstTerminee()){
+            jouerTourOrdinateur();
+            Ut.pause(2000);
+        }
+        System.out.println("Il n'y a plus de cartes ! Le score final est de  " + score);
+        Ut.pause(2000);
+        System.out.println("\n\n\n");
     }
 
     /**

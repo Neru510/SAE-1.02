@@ -20,13 +20,16 @@ public class Coordonnees {
     }
 
     /**
-     * Pre-requis : input est sous la forme  suivante : int,int
+     * Pre-requis : input est sous la forme suivante : int,int
      * Action : Construit des Coordonnées ayant x comme numéro de ligne et y comme numéro de colonne
      */
     public Coordonnees(String input) {
-        String[] splited = input.split(",");
-        this.ligne = Integer.parseInt(splited[0]);
-        this.colonne = Integer.parseInt(splited[1]);
+        if (formatEstValide(input)){
+            String[] splited = input.split(",");
+            this.ligne = Integer.parseInt(splited[0]);
+            this.colonne = Integer.parseInt(splited[1]);
+        }
+
         //splitted est un tableau de String qui contient les sous chaines de caracteres contenues dans input et séparées par ','
     }
 
@@ -52,11 +55,11 @@ public class Coordonnees {
     public static boolean formatEstValide(String input){
         boolean check;
         String[] splited = input.split(",");
-        if (splited.length!=2){
+        if (splited.length != 2){
             check = false;
         }
         else {
-            if (splited[0].equals("0")){
+            if (!Ut.estNombre(splited[0])|| !Ut.estNombre(splited[1]) || (0 > Integer.parseInt(splited[0]) ||  0 > Integer.parseInt(splited[1]))){
                 check = false;
             }
             else {
