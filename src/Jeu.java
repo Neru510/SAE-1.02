@@ -242,8 +242,13 @@ public class Jeu {
             }
             checkon = false;
         }
-        jouerTourHumain();
-        System.out.println("Il n'y a plus de cartes ! Voici ton score final : " + score);
+        if (check){
+            jouerTourHumain();
+            System.out.println("Il n'y a plus de cartes ! Voici ton score final : " + score);
+        }
+        else {
+            System.out.println("Quel dommage que tu ait choisi d'arrêter en pleine partie. Voici ton score final : " + score);
+        }
     }
 
     /**
