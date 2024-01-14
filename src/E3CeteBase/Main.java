@@ -1,3 +1,5 @@
+package E3CeteBase;
+
 public class Main {
 
     public static String toString(long [] tab) {
@@ -15,11 +17,11 @@ public class Main {
         Jeu jeu = new Jeu();
         jeu.jouer();
 /*
-        Couleur [] listeDeCouleur = Couleur.values();
-        Figure [] listeDeFigure = Figure.values();
-        Texture [] listeDeTexture= Texture.values();
+        E3Cete.Couleur [] listeDeCouleur = E3Cete.Couleur.values();
+        E3Cete.Figure [] listeDeFigure = E3Cete.Figure.values();
+        E3Cete.Texture [] listeDeTexture= E3Cete.Texture.values();
 
-        Paquet jeu1 = new Paquet(listeDeCouleur, 3, listeDeFigure, listeDeTexture);
+        E3Cete.Paquet jeu1 = new E3Cete.Paquet(listeDeCouleur, 3, listeDeFigure, listeDeTexture);
         System.out.println(jeu1.toString());
 /*
         System.out.println("Tri Selection = " + jeu1.testTriSelec() + " millisecondes");
@@ -58,7 +60,7 @@ public class Main {
 
             System.out.println("Tri Insertion = " + jeu1.testTriInser() + "ms");
 
-            System.out.println(Table.ligneDeXCarte(new Carte[] {jeu1.getCarteX(0), jeu1.getCarteX(1),jeu1.getCarteX(2)}));
+            System.out.println(E3Cete.Table.ligneDeXCarte(new E3Cete.Carte[] {jeu1.getCarteX(0), jeu1.getCarteX(1),jeu1.getCarteX(2)}));
         */
     }
 

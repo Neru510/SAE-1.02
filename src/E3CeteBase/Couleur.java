@@ -1,9 +1,11 @@
+package E3CeteBase;
+
 public enum Couleur {
 
     /**
-     * Représente la couleur d'une Carte : jaune, rouge ...
+     * Représente la couleur d'une E3Cete.Carte : jaune, rouge ...
      * En plus de donner une liste énumérative des couleurs possibles,
-     * cette enumération doit permettre à la méthode toString d'une Carte de réaliser un affichage en couleur.
+     * cette enumération doit permettre à la méthode toString d'une E3Cete.Carte de réaliser un affichage en couleur.
      */
     ROUGE("\u001B[41m"), JAUNE("\u001B[43m"), VERT("\u001B[42m");
     /**BLANC("\u001B[47m"), CYAN("\u001B[46m"), VIOLET("\u001B[45m"), BLEU("\u001B[44m")**/

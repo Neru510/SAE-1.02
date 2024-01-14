@@ -1,8 +1,9 @@
-import java.nio.channels.SelectableChannel;
+package E3CeteBase;
+
 import java.util.Scanner;
 
 /**
- * La classe Jeu permet de faire des parties du jeu "E3Cète" soit avec un humain, soit avec un ordinateur.
+ * La classe E3Cete.Jeu permet de faire des parties du jeu "E3Cète" soit avec un humain, soit avec un ordinateur.
  *
  * Règles :
  *
@@ -59,7 +60,7 @@ public class Jeu {
             }
 
             this.table.setCartes(cartesTable);
-            }
+        }
     }
 
     /**
@@ -186,7 +187,7 @@ public class Jeu {
 
     /**
      * Action : Fait jouer un tour à un joueur humain.
-     * La Table et le score du joueur sont affichés.
+     * La E3Cete.Table et le score du joueur sont affichés.
      * Le joueur sélectionne 3 cartes.
      *  - Si c'est un E3C, il gagne trois points.
      *  - Sinon, il perd un point.
@@ -242,13 +243,18 @@ public class Jeu {
             }
             checkon = false;
         }
-        jouerTourHumain();
-        System.out.println("Il n'y a plus de cartes ! Voici ton score final : " + score);
+        if (check){
+            jouerTourHumain();
+            System.out.println("Il n'y a plus de cartes ! Voici ton score final : " + score);
+        }
+        else {
+            System.out.println("Quel dommage que tu ait choisi d'arrêter en pleine partie. Voici ton score final : " + score);
+        }
     }
 
     /**
      * Action : Fait jouer un tour à l'ordinateur.
-     * La Table et le score de l'ordinateur sont affichés.
+     * La E3Cete.Table et le score de l'ordinateur sont affichés.
      * L'ordinateur sélectionne des cartes :
      *  - L'ordinateur essaye toujours de trouver un E3C sur la table. S'il en trouve un, il gagne donc trois points.
      *  - S'il n'en trouve pas, il se rabat sur 3 cartes sélectionnées aléatoirement et perd un point.
@@ -265,32 +271,44 @@ public class Jeu {
         System.out.println((cartes != null)+"\n");
         if (cartes != null){
             System.out.println("Saisie des coordonnées des cartes");
-            System.out.println("Affichage des cartes");
+            Ut.pause(500);
             score = score + 3;
         } else{
             cartes = selectionAleatoireDeCartesOrdinateur();
             System.out.println("Selection de cartes aléatoire");
+            Ut.pause(500);
             score = score - 1;
         }
+        System.out.println("Affichage des cartes");
+        Ut.pause(500);
         table.afficherSelection(cartes);
+
+        System.out.println("Le score est actuellement de " + score);
+        System.out.print("Il reste actuellement " + paquet.nbCarteRestantes + " carte");
+        if (paquet.nbCarteRestantes < 2){
+            System.out.print("s");
+        }
+        System.out.print(" dans le paquet.\n\nRemplacement des cartes ...\n\n");
         Ut.pause(1000);
         piocherEtPlacerNouvellesCartes(cartes);
-
+        System.out.println("|                     [Fin du tour de l'ordinateur]                     |");
+        Ut.pause(2000);
+        System.out.println("\n\n\n");
     }
 
     /**
      * Action : Fait jouer une partie à l'ordinateur.
      * Une pause est faite entre chaque tour (500 ms ou plus) afin de pouvoir observer la progression de l'ordinateur.
      * A la fin, le score final de l'ordinateur est affiché.
-     * Rappel : Ut.pause(temps) permet de faire une pause de "temps" millisecondes
+     * Rappel : E3Cete.Ut.pause(temps) permet de faire une pause de "temps" millisecondes
      */
 
     public void jouerOrdinateur() {
         while (!partieEstTerminee()){
             jouerTourOrdinateur();
-            Ut.pause(2000);
+
         }
-        System.out.println("Il n'y a plus de cartes ! Le score final est de  " + score);
+        System.out.println("Il n'y a plus de cartes ! Le score final est de " + score);
         Ut.pause(2000);
         System.out.println("\n\n\n");
     }

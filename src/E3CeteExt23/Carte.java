@@ -1,5 +1,7 @@
+package E3CeteExt23;
+
 /**
- * La classe Carte représente une carte possèdant une figure répétée un certain nombre de fois avec une texture et une couleur.
+ * La classe E3Cete.Carte représente une carte possèdant une figure répétée un certain nombre de fois avec une texture et une couleur.
  * On a besoin de connaître :
  * - La figure représentée,
  * - Le nombre de fois où la figure est représentée,
@@ -16,7 +18,7 @@ public class Carte  {
     /**
      * Pre-requis : nbFigures > 0
      * Action : Construit une carte contenant nbFigures "figures" qui possèdent une "texture" et une "couleur"
-     * Exemple : new Carte(Couleur.ROUGE, 2, Figure.OVALE, Texture.PLEIN) représente une carte contenant 2 figures ovales rouge et pleines
+     * Exemple : new E3Cete.Carte(E3Cete.Couleur.ROUGE, 2, E3Cete.Figure.OVALE, E3Cete.Texture.PLEIN) représente une carte contenant 2 figures ovales rouge et pleines
      */
 
     public Carte(Couleur couleur, int nbFigures, Figure figure, Texture texture) {
@@ -61,10 +63,10 @@ public class Carte  {
      * afin de déterminer si this est plus petit, égal ou plus grand que "carte"
      *
      * L'odre d'importance des attrbiuts est celui donné dans le constructeur (du plus prioritaire au moins prioritaire) :
-     * Couleur, nombre de figures, figure, texture.
+     * E3Cete.Couleur, nombre de figures, figure, texture.
      * Pour comparer les couleurs, les figures et les textures, on utilisera leur position (ordinal) dans
      * leurs énumérations respectives.
-     * Ainsi, pour toute paire {c1,c2} de Carte, c1 est inférieure à c2 si et seulement si
+     * Ainsi, pour toute paire {c1,c2} de E3Cete.Carte, c1 est inférieure à c2 si et seulement si
      * la valeur de c1 est inférieure à celle de c2 pour la caractéristique ayant la plus grande priorité
      * parmi celles pour lesquelles c1 et c2 ont des valeurs différentes.
      *
@@ -109,25 +111,25 @@ public class Carte  {
                 ligne = ligne + texture.getForme();
             }
         }
-        return ligne +'\n';
+        return ligne;
     }
-    private String ligne(int position, String value) {
-        String ligne = "";
-        for (int c = 0; c < 9; c++) {
-            if (c == position) {
-                ligne = ligne + value;
-            } else {
+    private String ligneF() {
+        String ligne ="";
+        for (int c = 0; c < 9; c++){
+            if (c == 4){
+                ligne = ligne + figure.getFigure();
+            }else {
                 ligne = ligne + texture.getForme();
             }
         }
-        return ligne + '\n';
+        return ligne;
     }
     private String ligne() {
         String ligne = "";
         for (int c = 0; c < 9; c++) {
             ligne = ligne + texture.getForme();
         }
-        return ligne + '\n';
+        return ligne;
     }
 
     /**
@@ -141,11 +143,30 @@ public class Carte  {
 
     @Override
     public String toString() {
-        String carte = ligne(1, nbFigures);
-        carte = carte+ligne();
-        carte = carte+ligne(4, figure.getFigure());
-        carte = carte+ligne();
-        carte = carte+ligne(7, nbFigures);
+        String carte= "";
+        for (int i = 0; i < 5; i++) {
+            carte = carte + getLigneX(i)+"\n";
+        }
+        return couleur.ColorString(carte);
+    }
+
+    public String getLigneX(int x){
+        String carte;
+        int poss;
+        if (x == 0 || x == 4){
+            if (x == 0){
+                poss = 1;
+            }
+            else{
+                poss = 7;
+            }
+            carte = ligne(poss, nbFigures);
+        }else if (x == 2){
+            carte = ligneF();
+        }
+        else {
+            carte = ligne();
+        }
         return couleur.ColorString(carte);
     }
 }

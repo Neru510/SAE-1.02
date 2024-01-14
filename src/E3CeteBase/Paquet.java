@@ -1,5 +1,7 @@
+package E3CeteBase;
+
 /**
- * La classe Paquet représente un paquet de cartes.
+ * La classe E3Cete.Paquet représente un paquet de cartes.
  * Les cartes sont stockées dans un tableau fixe et un indice (entier) permet de connaître le nombre de cartes
  * restantes (non piochées) dans le paquet. Quand on pioche, cet indice diminue.
  * Dans les traitements, on considère alors seulement les cartes se trouvant entre 0 et cet indice (exclus).
@@ -27,14 +29,14 @@ public class Paquet {
      *  Génère un paquet (mélangé) avec toutes les combinaisons de cartes possibles pour ces caractéristiques : 1-A-S (rouge), 1-A-T (rouge), etc...
      */
 
-    /**public Paquet(Couleur[] couleurs, int nbFiguresMax, Figure[] figures, Texture[] textures) {
-     ensTab = new Carte[ getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures)];
+    /**public E3Cete.Paquet(E3Cete.Couleur[] couleurs, int nbFiguresMax, E3Cete.Figure[] figures, E3Cete.Texture[] textures) {
+     ensTab = new E3Cete.Carte[ getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures)];
      for (int i = 0; i < getNombreCartesAGenerer(couleurs, nbFiguresMax, figures, textures); i++){
      for (int n = 1; n < nbFiguresMax+1; n++){
      for (int f = 0; f < figures.length; f++){
      for (int t = 0; t < textures.length; t++){
      for (int c = 0; c < couleurs.length; c++){
-     this.ensTab[i] = new Carte(couleurs[c], n, figures[f], textures[t]);
+     this.ensTab[i] = new E3Cete.Carte(couleurs[c], n, figures[f], textures[t]);
      }
      }
      }
@@ -128,7 +130,7 @@ public class Paquet {
      * Le tri est effectué à partir des données du paquet courant (this) mais celui-ci ne doit pas être modifié !
      * Une nouvelle instance du paquet est traitée et renvoyée.
      * On rappelle que le paquet peut aussi contenir des cartes déjà piochées qu'il faut ignorer (voir partie 2 de la SAE).
-     * Le tri doit fonctionner que le Paquet soit plein ou non.
+     * Le tri doit fonctionner que le E3Cete.Paquet soit plein ou non.
      * https://www.youtube.com/watch?v=Ns4TPTC8whw&t=2s vidéo explicative
      */
 
@@ -153,7 +155,7 @@ public class Paquet {
      * Le tri est effectué à partir des données du paquet courant (this) mais celui-ci ne doit pas être modifié !
      * Une nouvelle instance du paquet est traitée et renvoyée.
      * On rappelle que le paquet peut aussi contenir des cartes déjà piochées  qu'il faut ignorer (voir partie 2 de la SAE).
-     * Le tri doit fonctionner que le Paquet soit plein ou non.
+     * Le tri doit fonctionner que le E3Cete.Paquet soit plein ou non.
      * https://www.youtube.com/watch?v=lyZQPjUT5B4&embeds_referring_euri=https%3A%2F%2Fwww.developpez.com%2F&source_ve_path=Mjg2NjY&feature=emb_logo
      * vidéo explicative
      */
@@ -184,7 +186,7 @@ public class Paquet {
      * Le tri est effectué à partir des données du paquet courant (this) mais celui-ci ne doit pas être modifié !
      * Une nouvelle instance du paquet est traitée et renvoyée.
      * On rappelle que le paquet peut aussi contenir des cartes déjà piochées  qu'il faut ignorer (voir partie 2 de la SAE).
-     * Le tri doit fonctionner que le Paquet soit plein ou non.
+     * Le tri doit fonctionner que le E3Cete.Paquet soit plein ou non.
      * https://www.youtube.com/watch?v=ROalU379l3U&t=1s : vidéo explicative
      */
 
@@ -239,9 +241,9 @@ public class Paquet {
     /**
      * Pre-requis : 0 < nbCartes <= nombre de cartes restantes dans le paquet.
      *
-     * Action : Pioche nbCartes Cartes au dessus du Paquet this (et met à jour son état).
+     * Action : Pioche nbCartes Cartes au dessus du E3Cete.Paquet this (et met à jour son état).
      *
-     * Résultat : Un tableau contenant les nbCartes Cartes piochees dans le Paquet.
+     * Résultat : Un tableau contenant les nbCartes Cartes piochees dans le E3Cete.Paquet.
      *
      * Exemple :
      * Contenu paquet : [A,B,C,D,E,F,G]
@@ -316,7 +318,7 @@ public class Paquet {
             texte = texte + '\n';
         }
         if (this.nbCarteRestantes < 2){
-            texte = texte + "Carte restante : " + this.nbCarteRestantes;
+            texte = texte + "E3Cete.Carte restante : " + this.nbCarteRestantes;
         }else {
             texte = texte + "Cartes restantes : " + this.nbCarteRestantes;
         }
