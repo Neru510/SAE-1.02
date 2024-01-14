@@ -1,4 +1,4 @@
-package E3CeteExt23;
+package E3CeteExt235V1;
 
 /**
  * La classe E3Cete.Paquet représente un paquet de cartes.
@@ -80,12 +80,13 @@ public class Paquet {
     }
 
     public Paquet (int[] parametre){
+        this.ensTab = new Carte[parametre[0] * parametre[1]* parametre[2] * parametre[3]];
         Couleur[] couleurs = Couleur.values();
         Figure[] figures = Figure.values();
         Texture[] textures = Texture.values();
         int i = 0;
         for (int c = 0; c < parametre[0]; c++){
-            for (int n = 1; n < parametre[1]; n++){
+            for (int n = 1; n < parametre[1]+1; n++){
                 for (int f = 0; f < parametre[2]; f++){
                     for (int t = 0; t < parametre[3]; t++){
                         this.ensTab[i] = new Carte(couleurs[c], n, figures[f], textures[t]);
@@ -94,6 +95,7 @@ public class Paquet {
                 }
             }
         }
+        this.nbCarteRestantes = parametre[0] * parametre[1]* parametre[2] * parametre[3];
 
     }
 

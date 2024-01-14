@@ -10,47 +10,51 @@ public class Main {
         return s;
     }
 
+    public static void testTriTemps(){
+        Couleur [] listeDeCouleur = Couleur.values();
+        Figure [] listeDeFigure = Figure.values();
+        Texture [] listeDeTexture= Texture.values();
+
+        for (int i = 0; i < 100; i++) {
+
+            Paquet jeu1 = new Paquet(listeDeCouleur, i, listeDeFigure, listeDeTexture);
+            System.out.println(jeu1.toString());
+            System.out.println(Paquet.getNombreCartesAGenerer(listeDeCouleur, i, listeDeFigure, listeDeTexture) + "=========================");
+
+            System.out.println("Tri Selection = " + jeu1.testTriSelec() + " millisecondes");
+            System.out.println("Tri Bulle     = " + jeu1.testTriBulle() + " millisecondes");
+            System.out.println("Tri Insertion = " + jeu1.testTriInser() + " millisecondes");
+
+            long[] tabS = new long[100];
+            long[] tabB = new long[100];
+            long[] tabI = new long[100];
+            for (int j = 0; j < 100; j++) {
+                tabS[j] = jeu1.testTriSelec();
+                tabB[j] = jeu1.testTriBulle();
+                tabI[j] = jeu1.testTriInser();
+                jeu1.melanger();
+            }
+
+
+            System.out.println("Tri Selection");
+            System.out.println(toString(tabS));
+            System.out.println("================================================");
+            System.out.println("Tri Bulle");
+
+            System.out.println(toString(tabB));
+            System.out.println("================================================");
+            System.out.println("Tri Insertion");
+            System.out.println(toString(tabI));
+        }
+    }
+
     /**
      * Action : lance une partie de jeu "E3Cète"
      */
     public static void main(String[]args) {
-        Jeu jeu = new Jeu();
-        jeu.jouer();
-/*
-        E3Cete.Couleur [] listeDeCouleur = E3Cete.Couleur.values();
-        E3Cete.Figure [] listeDeFigure = E3Cete.Figure.values();
-        E3Cete.Texture [] listeDeTexture= E3Cete.Texture.values();
-
-        E3Cete.Paquet jeu1 = new E3Cete.Paquet(listeDeCouleur, 3, listeDeFigure, listeDeTexture);
-        System.out.println(jeu1.toString());
-/*
-        System.out.println("Tri Selection = " + jeu1.testTriSelec() + " millisecondes");
-        System.out.println("Tri Bulle     = " + jeu1.testTriBulle() + " millisecondes");
-        System.out.println("Tri Insertion = " + jeu1.testTriInser() + " millisecondes");
-
-        /*long [] tabS = new long[100];
-        long [] tabB = new long[100];
-        long [] tabI = new long[100];
-        for (int i = 0; i < 100; i++){
-            tabS[i] = jeu1.testTriSelec();
-            tabB[i] = jeu1.testTriBulle();
-            tabI[i] = jeu1.testTriInser();
-            jeu1.melanger();
-        }
-
-
-        System.out.println("Tri Selection");
-        System.out.println(toString(tabS));
-        System.out.println("================================================");
-        System.out.println("Tri Bulle");
-
-        System.out.println(toString(tabB));
-        System.out.println("================================================");
-        System.out.println("Tri Insertion");
-        System.out.println(toString(tabI));
-
-
-
+        //Jeu jeu = new Jeu();
+        //jeu.jouer();
+        testTriTemps();
 
 
         /*

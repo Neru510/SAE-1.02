@@ -1,4 +1,4 @@
-package E3CeteExt23;
+package E3CeteExt235V1;
 
 /**
  * La classe E3Cete.Carte représente une carte possèdant une figure répétée un certain nombre de fois avec une texture et une couleur.

@@ -1,8 +1,9 @@
-package E3CeteExt23;
+package E3CeteExt235V1;
 
 public class Coordonnees {
     private int ligne;
     private int colonne;
+    public static char [] alphabet = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'P', 'Q', 'R', 'S', 'T'};
 
 
 /**
@@ -65,7 +66,6 @@ public class Coordonnees {
     }
 
     public static int fromLetterToNumber(String lettre){
-        char [] alphabet = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'P', 'Q', 'R', 'S', 'T'};
         for (int i = 0; i < alphabet.length; i++){
             if (lettre.charAt(0) == alphabet[i]){
                 return i + 1;
@@ -90,12 +90,13 @@ public class Coordonnees {
             check = false;
         }
         else {
-            if (!Ut.estNombre(splited[0]) || Coordonnees.estDansAlphabet(splited[0])|| !Ut.estNombre(splited[1]) || 0 > Integer.parseInt(splited[1])){
-                check = false;
+            if ((Ut.estNombre(splited[1]) && 0 < Integer.parseInt(splited[1])) && (Ut.estNombre(splited[0]) && 0 < Integer.parseInt(splited[0]))
+             || Coordonnees.estDansAlphabet(splited[0])){
+                check = true;
             }
 
             else {
-                check = true;
+                check = false;
             }
         }
         return check;

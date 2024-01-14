@@ -1,4 +1,4 @@
-package E3CeteExt23;
+package E3CeteExt235V1;
 
 import static java.lang.Math.sqrt;
 
@@ -60,6 +60,29 @@ public class Table {
         return texte;
     }
 
+    public static String ligneDeXCarteV(Carte[] paquet, char l){
+        String texte = "";
+        int min = 0;
+        int y = min;
+        char value ;
+        for (int x = 0; x <5; x++){
+            for (int c = 0; c < paquet.length; c++){
+                if (c == 0){
+                    if (x == 2){
+                        texte = texte + l + " ";
+                    }else {
+                        texte = texte + "  ";
+                    }
+
+                }
+                texte = texte + paquet[c].getLigneX(x);
+                texte = texte + Couleur.getAnnuler() + " ";
+
+            }
+            texte = texte  + '\n';
+        }
+        return texte;
+    }
     /**
      * Pre-requis : la table est pleine
      * Action : Affiche des cartes de la table sous forme de matrice
@@ -94,10 +117,21 @@ public class Table {
         Carte[] ligne;
         ligne = new Carte[getDimension()[0]];
         int i = 0;
+        int l = 0;
+        texte = texte + "  ";
+        for (int y = 0; y < getDimension()[0]; y++){
+            if (y+1 < 10)
+                texte = texte +"    "+(y+1)+"     ";
+            else {
+                texte = texte +"   "+(y+1)+"     ";
+            }
+        }
+        texte = texte + "\n";
         for (int x = 0; x < tableau.length; x++){
             ligne[i] = cartes[x];
             if ((x+1)%getDimension()[0] == 0){
-                texte = texte + ligneDeXCarte(ligne) + "\n";
+                texte = texte + ligneDeXCarteV(ligne, Coordonnees.alphabet[l]) + "\n";
+                l = l + 1;
                 ligne = new Carte[getDimension()[0]];
                 i = -1;
             }
@@ -187,6 +221,7 @@ public class Table {
         int [] carteSelect = new int[nbCartes];
         int ajout = 0;
         int carte;
+
         while (ajout < nbCartes){
             carte = faireSelectionneUneCarte();
             if (!intInTab(carte, carteSelect)){

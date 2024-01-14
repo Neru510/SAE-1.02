@@ -1,4 +1,4 @@
-package E3CeteExt23;// dmaj : 24 septembre 2023
+package E3CeteExt235V1;// dmaj : 24 septembre 2023
 
 import java.util.Random;
 import java.util.Scanner;
