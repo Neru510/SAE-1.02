@@ -145,6 +145,9 @@ public class Paquet {
         }
     }
 
+    public void addnbOperation(){
+    }
+
     /**
      * Action : Calcule et renvoie un paquet trié à partir du paquet courant (this) selon la méthode du tri selection.
      * Le tri est effectué à partir des données du paquet courant (this) mais celui-ci ne doit pas être modifié !
@@ -245,17 +248,59 @@ public class Paquet {
         return Ut.getTempsExecution(runnable);
     }
 
-    public static void testTri(){
-        Couleur [] listeDeCouleur = Couleur.values();
-        Figure [] listeDeFigure = Figure.values();
-        Texture [] listeDeTexture= Texture.values();
+    public static String toString(long [] tab) {
+        String s = "";
+        for (int i = 0; i<100; i++){
+            s = s + '\n' + tab[i];
+        }
+        return s;
+    }
 
-        Paquet jeu1 = new Paquet(listeDeCouleur, 1000, listeDeFigure, listeDeTexture);
-        System.out.println("Nous allons tester différent trie sur un paquet de " + jeu1.nbCarteRestantes + " cartes");
-        jeu1.melanger();
-        System.out.println("Tri Selection = " + jeu1.testTriSelec() + "ms");
-        System.out.println("Tri Bulle = " + jeu1.testTriBulle() + "ms");
-        System.out.println("Tri Insertion = " + jeu1.testTriInser() + "ms");
+    public static void testTriTemps(){
+        Couleur[] listeDeCouleur = Couleur.values();
+        Figure[] listeDeFigure = Figure.values();
+        Texture[] listeDeTexture= Texture.values();
+
+        for (int i = 1; i < 100; i++) {
+
+            Paquet jeu1 = new Paquet(listeDeCouleur, i, listeDeFigure, listeDeTexture);
+
+            System.out.println("Tri Selection = " + jeu1.testTriSelec() + " millisecondes");
+            System.out.println("Tri Bulle     = " + jeu1.testTriBulle() + " millisecondes");
+            System.out.println("Tri Insertion = " + jeu1.testTriInser() + " millisecondes");
+
+            long[] tabS = new long[100];
+            long[] tabB = new long[100];
+            long[] tabI = new long[100];
+            for (int j = 0; j < 100; j++) {
+                tabS[j] = jeu1.testTriSelec();
+                tabB[j] = jeu1.testTriBulle();
+                tabI[j] = jeu1.testTriInser();
+                jeu1.melanger();
+            }
+
+            long sommeS = 0;
+            long sommeB = 0;
+            long sommeI = 0;
+            for (int j = 0; j < 100; j++){
+                sommeS = sommeS + tabS[j];
+                sommeB = sommeB + tabB[j];
+                sommeI = sommeI + tabI[j];
+            }
+            long moyenneS = sommeS / 100;
+            long moyenneB = sommeB / 100;
+            long moyenneI = sommeI / 100;
+
+            System.out.println(Paquet.getNombreCartesAGenerer(listeDeCouleur, i, listeDeFigure, listeDeTexture) + "=========================");
+            System.out.println("Selection : " + moyenneS);
+            System.out.println("Bulle : " + moyenneB);
+            System.out.println("Insertion : " + moyenneS);
+        }
+    }
+
+
+    public static void testTri(){
+        testTriTemps();
     }
 
     /**

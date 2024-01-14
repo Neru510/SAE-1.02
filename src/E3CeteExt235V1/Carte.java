@@ -28,6 +28,7 @@ public class Carte  {
         this.texture = texture;
     }
 
+
     /**
      * Résultat : Le nombre de fois où la figure est représentée sur la carte.
      */

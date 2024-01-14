@@ -11,8 +11,9 @@ package E3CeteBase;
  * - Le nombre de cartes restantes dans le paquet.
  */
 public class Paquet {
-    public Carte [] ensTab;
+    public Carte[] ensTab;
     public int nbCarteRestantes;
+    public int nbOperations;
 
     /**
      * Pre-requis : figures.length > 0, couleurs.length > 0, textures.length > 0, nbFiguresMax > 0
@@ -59,7 +60,6 @@ public class Paquet {
             }
         }
         nbCarteRestantes = ensTab.length;
-        //rajouter fonction mélanger ici
         this.melanger();
     }
 
@@ -73,10 +73,33 @@ public class Paquet {
 
     public Paquet(Paquet paquet) {
         this.ensTab = new Carte[paquet.ensTab.length];
+        nbOperations = nbOperations + 1;
         for (int i = 0; i < paquet.ensTab.length; i++){
             this.ensTab[i] = paquet.ensTab[i];
+            nbOperations = nbOperations + 2;
         }
         this.nbCarteRestantes = paquet.nbCarteRestantes;
+        nbOperations = nbOperations + 1;
+    }
+
+    public Paquet (int[] parametre){
+        this.ensTab = new Carte[parametre[0] * parametre[1]* parametre[2] * parametre[3]];
+        Couleur[] couleurs = Couleur.values();
+        Figure[] figures = Figure.values();
+        Texture[] textures = Texture.values();
+        int i = 0;
+        for (int c = 0; c < parametre[0]; c++){
+            for (int n = 1; n < parametre[1]+1; n++){
+                for (int f = 0; f < parametre[2]; f++){
+                    for (int t = 0; t < parametre[3]; t++){
+                        this.ensTab[i] = new Carte(couleurs[c], n, figures[f], textures[t]);
+                        i = i+1;
+                    }
+                }
+            }
+        }
+        this.nbCarteRestantes = parametre[0] * parametre[1]* parametre[2] * parametre[3];
+
     }
 
 
@@ -117,11 +140,16 @@ public class Paquet {
      * Action : échange deux cartes dont les indices sont donnés en paramètre
      */
     public void swap(int r1, int r2){
+        nbOperations = nbOperations + 1;
         if (r1!=r2) {
             Carte c1 = new Carte(ensTab[r1].getCouleur(), ensTab[r1].getNbFigures(), ensTab[r1].getFigure(), ensTab[r1].getTexture());
+            nbOperations = nbOperations + 5;
             Carte c2 = new Carte(ensTab[r2].getCouleur(), ensTab[r2].getNbFigures(), ensTab[r2].getFigure(), ensTab[r2].getTexture());
+            nbOperations = nbOperations + 5;
             ensTab[r1] = c2;
+            nbOperations = nbOperations + 1;
             ensTab[r2] = c1;
+            nbOperations = nbOperations + 1;
         }
     }
 
@@ -136,15 +164,21 @@ public class Paquet {
 
     public Paquet trierSelection() {
         Paquet paquetTrier = new Paquet(this);
+        nbOperations = nbOperations + 5;
         int min;
+        nbOperations = nbOperations + 1;
         for (int i = 0; i < paquetTrier.nbCarteRestantes; i++){
             min = i;
+            nbOperations = nbOperations + 1;
             for (int j = i+1; j < paquetTrier.nbCarteRestantes; j++){
                 if (paquetTrier.ensTab[min].compareTo(paquetTrier.ensTab[j]) < 0){
                     min = j;
+                    nbOperations = nbOperations + 1;
                 }
+                nbOperations = nbOperations + 2;
             }
             paquetTrier.swap(i, min);
+            nbOperations = nbOperations + 1;
         }
         return paquetTrier;
     }
@@ -162,20 +196,28 @@ public class Paquet {
 
     public Paquet trierBulles() {
         Paquet paquetTrier = new Paquet(this);
+        nbOperations = nbOperations + 5;
         int compteur = 0;
+        nbOperations = nbOperations + 1;
         boolean check = false;
+        nbOperations = nbOperations + 1;
         for (int i = paquetTrier.nbCarteRestantes; !check && 0 < i; i--) {
             for (int j = 0; j < i - 1; j++) {
                 if (paquetTrier.ensTab[j].compareTo(paquetTrier.ensTab[j+1]) < 0) {
                     paquetTrier.swap(j, j+1);
+                    nbOperations = nbOperations + 1;
                     compteur = compteur + 1;
+                    nbOperations = nbOperations + 1;
                 }
+                nbOperations = nbOperations + 2;
             }
             if (compteur > 0){
                 compteur = 0;
+                nbOperations = nbOperations + 2;
             }
             else {
                 check = true;
+                nbOperations = nbOperations + 3;
             }
         }
         return paquetTrier;
@@ -192,13 +234,19 @@ public class Paquet {
 
     public Paquet trierInsertion() {
         Paquet paquetTrier = new Paquet(this);
+        nbOperations = nbOperations + 5;
         int k;
+        nbOperations = nbOperations + 1;
         for (int i = 1; i < paquetTrier.nbCarteRestantes; i++){
             k = i;
+            nbOperations = nbOperations + 1;
             while (k > 0 && paquetTrier.ensTab[i].compareTo(paquetTrier.ensTab[k-1]) > 0){
                 paquetTrier.swap(k, k-1);
+                nbOperations = nbOperations + 1;
                 k = k-1;
+                nbOperations = nbOperations + 1;
             }
+            nbOperations = nbOperations + 1;
         }
         return paquetTrier;
     }
@@ -225,17 +273,110 @@ public class Paquet {
         return Ut.getTempsExecution(runnable);
     }
 
-    public static void testTri(){
-        Couleur [] listeDeCouleur = Couleur.values();
-        Figure [] listeDeFigure = Figure.values();
-        Texture [] listeDeTexture= Texture.values();
+    public static String toString(long [] tab) {
+        String s = "";
+        for (int i = 0; i<100; i++){
+            s = s + '\n' + tab[i];
+        }
+        return s;
+    }
 
-        Paquet jeu1 = new Paquet(listeDeCouleur, 1000, listeDeFigure, listeDeTexture);
-        System.out.println("Nous allons tester différent trie sur un paquet de " + jeu1.nbCarteRestantes + " cartes");
-        jeu1.melanger();
-        System.out.println("Tri Selection = " + jeu1.testTriSelec() + "ms");
-        System.out.println("Tri Bulle = " + jeu1.testTriBulle() + "ms");
-        System.out.println("Tri Insertion = " + jeu1.testTriInser() + "ms");
+    public static void testTriTemps(){
+        Couleur[] listeDeCouleur = Couleur.values();
+        Figure[] listeDeFigure = Figure.values();
+        Texture[] listeDeTexture= Texture.values();
+
+        for (int i = 1; i < 100; i++) {
+
+            Paquet jeu1 = new Paquet(listeDeCouleur, i, listeDeFigure, listeDeTexture);
+
+            System.out.println("Tri Selection = " + jeu1.testTriSelec() + " millisecondes");
+            System.out.println("Tri Bulle     = " + jeu1.testTriBulle() + " millisecondes");
+            System.out.println("Tri Insertion = " + jeu1.testTriInser() + " millisecondes");
+
+            long[] tabS = new long[100];
+            long[] tabB = new long[100];
+            long[] tabI = new long[100];
+            for (int j = 0; j < 100; j++) {
+                tabS[j] = jeu1.testTriSelec();
+                tabB[j] = jeu1.testTriBulle();
+                tabI[j] = jeu1.testTriInser();
+                jeu1.melanger();
+            }
+
+            long sommeS = 0;
+            long sommeB = 0;
+            long sommeI = 0;
+            for (int j = 0; j < 100; j++){
+                sommeS = sommeS + tabS[j];
+                sommeB = sommeB + tabB[j];
+                sommeI = sommeI + tabI[j];
+            }
+            long moyenneS = sommeS / 100;
+            long moyenneB = sommeB / 100;
+            long moyenneI = sommeI / 100;
+
+            System.out.println(Paquet.getNombreCartesAGenerer(listeDeCouleur, i, listeDeFigure, listeDeTexture) + "=========================");
+            System.out.println("Selection : " + moyenneS);
+            System.out.println("Bulle : " + moyenneB);
+            System.out.println("Insertion : " + moyenneS);
+        }
+    }
+
+    public void testTriNbOperation(){
+        Couleur[] listeDeCouleur = Couleur.values();
+        Figure[] listeDeFigure = Figure.values();
+        Texture[] listeDeTexture= Texture.values();
+        Paquet paquet = this;
+
+        for (int i = 67; i <= 67; i++) {
+            paquet = new Paquet(listeDeCouleur, i, listeDeFigure, listeDeTexture);
+
+
+            int[] tabS = new int[1];
+            int[] tabB = new int[1];
+            int[] tabI = new int[1];
+            paquet.nbOperations = 0;
+            for (int j = 0; j < 1; j++) {
+                paquet.nbOperations = 0;
+                paquet.testTriSelec();
+                tabS[j] = paquet.nbOperations;
+                paquet.nbOperations = 0;
+                paquet.testTriBulle();
+                tabB[j] = paquet.nbOperations;
+                paquet.nbOperations = 0;
+                paquet.testTriInser();
+                tabI[j] = paquet.nbOperations;
+                paquet.melanger();
+            }
+
+            int sommeS = 0;
+            int sommeB = 0;
+            int sommeI = 0;
+            for (int j = 0; j < 1; j++) {
+                sommeS = sommeS + tabS[j];
+                sommeB = sommeB + tabB[j];
+                sommeI = sommeI + tabI[j];
+            }
+            long moyenneS = sommeS / 1;
+            long moyenneB = sommeB / 1;
+            long moyenneI = sommeI / 1;
+
+            System.out.println(Paquet.getNombreCartesAGenerer(listeDeCouleur, i, listeDeFigure, listeDeTexture) + "=========================");
+            System.out.println(moyenneS);
+            System.out.println(moyenneB);
+            System.out.println(moyenneI);
+        }
+    }
+
+    public static void testTri(){
+        //testTriTemps();
+        Couleur[] listeDeCouleur = Couleur.values();
+        Figure[] listeDeFigure = Figure.values();
+        Texture[] listeDeTexture= Texture.values();
+        int i = 1;
+        Paquet jeu1 = new Paquet(listeDeCouleur, i, listeDeFigure, listeDeTexture);
+        jeu1.testTriNbOperation();
     }
 
     /**

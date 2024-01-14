@@ -254,7 +254,7 @@ public class Ut {
         long startTime = System.nanoTime();
         methodeSansArguments.run();
         long endTime = System.nanoTime();
-        return ((endTime - startTime) / 1000000);
+        return ((endTime - startTime));
     }
 
 } // end class
