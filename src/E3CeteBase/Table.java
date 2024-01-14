@@ -121,7 +121,7 @@ public class Table {
     public boolean carteExiste(Coordonnees coordonnees) {
         boolean value = false;
         int[] xy = getDimension();
-        if (0 <= coordonnees.getLigne() && coordonnees.getLigne() <= xy[0] && 0 <= coordonnees.getColonne() && coordonnees.getColonne() <= xy[1]){
+        if (0 <= coordonnees.getLigne() && coordonnees.getLigne() <= xy[0] && coordonnees.getLigne() < getDimension()[0] && 0 <= coordonnees.getColonne() && coordonnees.getColonne() <= xy[1]  && coordonnees.getColonne() < getDimension()[1]){
             value = true;
         }
         return value;
