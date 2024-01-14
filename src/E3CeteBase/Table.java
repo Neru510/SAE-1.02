@@ -148,7 +148,7 @@ public class Table {
 
     public int faireSelectionneUneCarte() {
         int [] dimension = this.getDimension();
-        System.out.println("Saisissez les coordonnées de la carte souhaitée au format 'x,y' ou 'lettre,y'");
+        System.out.println("Saisissez les coordonnées de la carte souhaitée au format 'x,y'");
         String texte = Ut.saisirChaine();
         if (Coordonnees.formatEstValide(texte)){
             Coordonnees coordonne = new Coordonnees(texte);
@@ -198,7 +198,6 @@ public class Table {
         int carte;
         while (ajout < nbCartes){
             carte = faireSelectionneUneCarte();
-            //problème carte coordonnée 3
             if (!intInTab(carte, carteSelect)){
                 carteSelect[ajout] = carte;
                 ajout = ajout+1;
