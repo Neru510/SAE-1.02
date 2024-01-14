@@ -30,7 +30,9 @@ public class Table {
      */
 
     public Table(int hauteur, int largeur){
-        this.tableau = new int [hauteur * largeur];
+        if (hauteur <= 20 && largeur <= 20){
+            this.tableau = new int [hauteur * largeur];
+        }
     }
 
     /**
@@ -119,7 +121,7 @@ public class Table {
     public boolean carteExiste(Coordonnees coordonnees) {
         boolean value = false;
         int[] xy = getDimension();
-        if (0 <= coordonnees.getLigne() && coordonnees.getLigne() < xy[0] && 0 <= coordonnees.getColonne() && coordonnees.getColonne() < xy[1]){
+        if (0 <= coordonnees.getLigne() && coordonnees.getLigne() <= xy[0] && 0 <= coordonnees.getColonne() && coordonnees.getColonne() <= xy[1]){
             value = true;
         }
         return value;
@@ -146,11 +148,11 @@ public class Table {
 
     public int faireSelectionneUneCarte() {
         int [] dimension = this.getDimension();
-        System.out.println("Saisissez les coordonné de la carte souhaitée au format 'x,y' : ");
+        System.out.println("Saisissez les coordonnées de la carte souhaitée au format 'x,y' ou 'lettre,y'");
         String texte = Ut.saisirChaine();
         if (Coordonnees.formatEstValide(texte)){
             Coordonnees coordonne = new Coordonnees(texte);
-            if (carteExiste(new Coordonnees(coordonne.getLigne(), coordonne.getColonne()))){
+            if (carteExiste(coordonne)){
                 return getPositionByCoordonnes(coordonne);
             }
         }
@@ -196,6 +198,7 @@ public class Table {
         int carte;
         while (ajout < nbCartes){
             carte = faireSelectionneUneCarte();
+            //problème carte coordonnée 3
             if (!intInTab(carte, carteSelect)){
                 carteSelect[ajout] = carte;
                 ajout = ajout+1;
